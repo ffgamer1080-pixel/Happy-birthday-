@@ -468,7 +468,6 @@
         <div class="credit">— Aniket</div>
     </div>
 </div>
-
 <script>
     (function() {
         'use strict';
@@ -602,7 +601,7 @@
             var vol = 0;
             var interval = setInterval(function() {
                 if (vol < 0.5) {
-                    vol += 0.035;
+                    vol = vol + 0.035;
                     musicEl.volume = Math.min(vol, 0.5);
                 } else {
                     clearInterval(interval);
@@ -618,5 +617,266 @@
             var vol = musicEl.volume;
             var interval = setInterval(function() {
                 if (vol > 0.05) {
-                    vol -= 0.05;
-                    musicEl.volume = Ma
+                    vol = vol - 0.05;
+                    musicEl.volume = Math.max(vol, 0);
+                } else {
+                    clearInterval(interval);
+                    musicEl.pause();
+                    if (callback) callback();
+                }
+            }, 80);
+        }
+
+        // ============================================
+        // BUILD BOOK
+        // ============================================
+        function buildBook() {
+            book.innerHTML = '';
+
+            // Front cover
+            addPage('front');
+
+            // Photos 1-6
+            for (var i = 0; i < 6; i++) {
+                addPage('photo', i + 1, i);
+            }
+
+            // Birthday page
+            addBirthdayPage();
+
+            // Back cover
+            addPage('back');
+
+            totalPages = book.children.length;
+
+            var pages = book.querySelectorAll('.page');
+            for (var j = 0; j < pages.length; j++) {
+                var p = pages[j];
+                if (j === 0) {
+                    p.style.transform = 'rotateY(0deg)';
+                } else {
+                    p.style.transform = 'rotateY(-180deg)';
+                }
+                p.style.zIndex = totalPages - j;
+                p.style.opacity = '1';
+            }
+
+            currentPage = 0;
+            updateProgress();
+            updateButtons();
+        }
+
+        // ============================================
+        // ADD PAGE
+        // ============================================
+        function addPage(type, idx, lyricIdx) {
+            var page = document.createElement('div');
+            page.className = 'page';
+            var inner = document.createElement('div');
+            inner.className = 'page-inner';
+
+            if (type === 'front') {
+                inner.innerHTML = `
+                    <div class="polaroid" style="justify-content:center;">
+                        <img src="assets/photos/front.jpg" alt="Front" style="height:70%;width:90%;object-fit:contain;border-radius:2px;">
+                        <div style="margin-top:10px;font-size:1.5rem;font-weight:400;color:#b8860b;letter-spacing:2px;">✨ MY LOVE KOMAL ✨</div>
+                        <div style="font-size:0.65rem;letter-spacing:5px;color:#8a7a6a;font-style:italic;">❤️ Birthday ❤️</div>
+                    </div>
+                `;
+            } else if (type === 'photo') {
+                var num = idx;
+                var lyric = LYRICS[lyricIdx] || '🌟';
+                inner.innerHTML = `
+                    <div class="polaroid">
+                        <img src="assets/photos/pic${num}.jpg" alt="Photo ${num}" style="height:82%;width:100%;object-fit:contain;">
+                        <div class="polaroid-caption">${lyric}</div>
+                    </div>
+                `;
+            } else if (type === 'back') {
+                inner.innerHTML = `
+                    <div class="polaroid" style="justify-content:center;">
+                        <img src="assets/photos/back.jpg" alt="Back" style="height:70%;width:90%;object-fit:contain;border-radius:2px;">
+                        <div style="margin-top:10px;font-size:1.3rem;color:#6a5a4a;font-style:italic;letter-spacing:4px;">🌟 Forever 🌟</div>
+                    </div>
+                `;
+            }
+
+            page.appendChild(inner);
+            book.appendChild(page);
+        }
+
+        // ============================================
+        // ADD BIRTHDAY PAGE
+        // ============================================
+        function addBirthdayPage() {
+            var page = document.createElement('div');
+            page.className = 'page';
+            var inner = document.createElement('div');
+            inner.className = 'page-inner birthday-page';
+            inner.innerHTML = `
+                <h2>🎂 Happy Birthday</h2>
+                <div style="font-size:2.2rem;margin:0.2rem 0;font-weight:700;color:#5a3a2a;">MY LOVE KOMAL ❤️</div>
+                <div class="sub">Wishing you all the love &amp; happiness</div>
+                <div class="love">❤️ Made With Love ❤️</div>
+                <div style="margin-top:0.8rem;font-size:0.9rem;color:#b8860b;letter-spacing:4px;">— Aniket</div>
+            `;
+            page.appendChild(inner);
+
+            var children = book.children;
+            if (children.length >= 7) {
+                book.insertBefore(page, children[7]);
+            } else {
+                book.appendChild(page);
+            }
+        }
+
+        // ============================================
+        // OPEN BOOK
+        // ============================================
+        function openBook() {
+            if (bookOpen) return;
+            bookOpen = true;
+            flipControls.classList.add('active');
+            setTimeout(function() {
+                flipToPage(0);
+            }, 600);
+        }
+
+        // ============================================
+        // FLIP TO PAGE
+        // ============================================
+        function flipToPage(index) {
+            if (isFlipping || closing) return;
+            if (index < 0 || index >= totalPages) return;
+
+            isFlipping = true;
+            var pages = book.querySelectorAll('.page');
+
+            for (var i = 0; i < pages.length; i++) {
+                var p = pages[i];
+                if (i <= index) {
+                    p.style.transform = 'rotateY(0deg)';
+                } else {
+                    p.style.transform = 'rotateY(-180deg)';
+                }
+                p.style.zIndex = totalPages - i;
+            }
+
+            currentPage = index;
+            updateProgress();
+            updateButtons();
+
+            setTimeout(function() {
+                isFlipping = false;
+            }, 500);
+        }
+
+        // ============================================
+        // UPDATE UI
+        // ============================================
+        function updateProgress() {
+            var total = totalPages || 9;
+            progress.textContent = (Math.min(currentPage + 1, total)) + ' / ' + total;
+        }
+
+        function updateButtons() {
+            prevBtn.disabled = currentPage === 0;
+            nextBtn.disabled = currentPage === totalPages - 1;
+        }
+
+        // ============================================
+        // CLOSE BOOK
+        // ============================================
+        function closeBook() {
+            if (closing) return;
+            closing = true;
+
+            var pages = book.querySelectorAll('.page');
+            for (var i = pages.length - 1; i >= 0; i--) {
+                var p = pages[i];
+                p.style.transform = 'rotateY(-180deg)';
+                p.style.zIndex = totalPages - i;
+            }
+
+            flipControls.classList.remove('active');
+            fadeOutMusic(function() {
+                finalScreen.classList.add('active');
+                bookContainer.style.display = 'none';
+            });
+        }
+
+        // ============================================
+        // BUTTON EVENTS
+        // ============================================
+        prevBtn.addEventListener('click', function() {
+            if (currentPage > 0) {
+                flipToPage(currentPage - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', function() {
+            if (currentPage < totalPages - 1) {
+                flipToPage(currentPage + 1);
+            } else {
+                closeBook();
+            }
+        });
+
+        // ============================================
+        // KEYBOARD SUPPORT
+        // ============================================
+        document.addEventListener('keydown', function(e) {
+            if (!bookContainer.classList.contains('active')) return;
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                if (currentPage < totalPages - 1) {
+                    flipToPage(currentPage + 1);
+                } else {
+                    closeBook();
+                }
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                if (currentPage > 0) {
+                    flipToPage(currentPage - 1);
+                }
+            }
+        });
+
+        // ============================================
+        // VISIBILITY
+        // ============================================
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                if (musicEl) musicEl.pause();
+            } else {
+                if (musicEl && musicStarted) {
+                    musicEl.play().catch(function() {});
+                }
+            }
+        });
+
+        // ============================================
+        // PRELOAD IMAGES
+        // ============================================
+        function preloadImages() {
+            var names = ['front', 'back', 'pic1', 'pic2', 'pic3', 'pic4', 'pic5', 'pic6'];
+            for (var i = 0; i < names.length; i++) {
+                var img = new Image();
+                img.src = 'assets/photos/' + names[i] + '.jpg';
+            }
+        }
+        preloadImages();
+
+        // ============================================
+        // CLEANUP
+        // ============================================
+        window.addEventListener('beforeunload', function() {
+            if (musicEl) musicEl.pause();
+        });
+
+        console.log('❤️ Happy Birthday Komal - Premium Luxury ❤️');
+        console.log('✅ All systems ready!');
+    })();
+</script>
+</body>
+</html>
