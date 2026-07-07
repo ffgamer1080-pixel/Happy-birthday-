@@ -172,7 +172,7 @@
             font-weight: 300;
         }
 
-        /* ===== BOOK CONTAINER - 3D FIXED ===== */
+        /* ===== BOOK CONTAINER ===== */
         #book-container {
             position: absolute;
             inset: 0;
@@ -197,7 +197,6 @@
             transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* ===== PAGES - REAL BOOK STYLE ===== */
         .page {
             position: absolute;
             width: 100%;
@@ -229,34 +228,105 @@
             box-shadow: inset 0 0 30px rgba(0,0,0,0.03);
         }
 
-        /* ===== POLAROID STYLE ===== */
-        .polaroid {
-            width: 92%;
-            height: 88%;
-            background: #fcf6ed;
-            padding: 12px 12px 20px 12px;
+        /* ===== PHOTO WITH OVERLAY TEXT ===== */
+        .photo-container {
+            position: relative;
+            width: 95%;
+            height: 90%;
             border-radius: 3px;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+            overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+            background: #e8ddd0;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0.9) 100%);
+            padding: 35px 14px 16px 14px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+        }
+
+        .page.active .photo-overlay {
+            opacity: 1;
+        }
+
+        .photo-overlay .lyrics-line {
+            color: #f9e5b3;
+            font-size: 0.7rem;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            letter-spacing: 1px;
+            line-height: 1.7;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+            padding: 0 4px;
+        }
+
+        .photo-overlay .lyrics-line.hindi {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #f9e5b3;
+        }
+
+        .photo-overlay .lyrics-line.hinglish {
+            font-size: 0.65rem;
+            color: #d4af37;
+            opacity: 0.9;
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        .photo-overlay .lyrics-divider {
+            width: 40px;
+            height: 1px;
+            background: rgba(212, 175, 55, 0.3);
+            margin: 4px auto;
+        }
+
+        /* ===== FRONT COVER ===== */
+        .cover-container {
+            width: 95%;
+            height: 90%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background: #fcf6ed;
+            border-radius: 3px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+            padding: 8px;
         }
-        .polaroid img {
+        .cover-container img {
             width: 100%;
-            height: 80%;
+            height: 78%;
             object-fit: contain;
             border-radius: 2px;
             background: #e8ddd0;
         }
-        .polaroid-caption {
-            margin-top: 10px;
-            font-size: 0.7rem;
-            color: #6a5a4a;
-            letter-spacing: 3px;
+        .cover-container .cover-title {
+            margin-top: 8px;
+            font-size: 1.3rem;
             font-weight: 400;
-            text-transform: uppercase;
+            color: #b8860b;
+            letter-spacing: 2px;
+        }
+        .cover-container .cover-sub {
+            font-size: 0.6rem;
+            letter-spacing: 5px;
+            color: #8a7a6a;
             font-style: italic;
         }
 
@@ -290,7 +360,6 @@
             color: #b8860b;
         }
 
-        /* ===== BOOK SPINE EFFECT ===== */
         .page::after {
             content: '';
             position: absolute;
@@ -437,6 +506,28 @@
             font-weight: 300;
         }
 
+        #auto-indicator {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 300;
+            color: rgba(212, 175, 55, 0.4);
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 300;
+            background: rgba(0,0,0,0.3);
+            padding: 3px 14px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            display: none;
+        }
+        #auto-indicator.active {
+            display: block;
+        }
+
         @media (max-width: 420px) {
             .big-name { font-size: 3rem; }
             .heart-icon { font-size: 4.2rem; }
@@ -446,6 +537,8 @@
             .countdown-big { font-size: 4rem; }
             .flip-btn { padding: 10px 14px; font-size: 0.7rem; min-width: 65px; letter-spacing: 2px; }
             #flip-controls { padding: 0 12px; bottom: 60px; }
+            .photo-overlay .lyrics-line.hindi { font-size: 0.7rem; }
+            .photo-overlay .lyrics-line.hinglish { font-size: 0.55rem; }
         }
         @media (max-width: 380px) {
             .big-name { font-size: 2.5rem; }
@@ -474,6 +567,7 @@
     <!-- BOOK CONTAINER -->
     <div id="book-container">
         <div id="book"></div>
+        <div id="auto-indicator">✨ Auto Flip ✨</div>
         <div id="flip-controls">
             <button class="flip-btn prev" id="prevBtn">‹ Prev</button>
             <button class="flip-btn next" id="nextBtn">Next ›</button>
@@ -489,6 +583,8 @@
         <p>Made With Love ❤️</p>
         <div class="credit">— Aniket</div>
     </div>
+</div>
+
 <script>
     (function() {
         'use strict';
@@ -507,6 +603,7 @@
         var flipControls = document.getElementById('flip-controls');
         var prevBtn = document.getElementById('prevBtn');
         var nextBtn = document.getElementById('nextBtn');
+        var autoIndicator = document.getElementById('auto-indicator');
 
         // ============================================
         // STATE
@@ -520,18 +617,160 @@
         var closing = false;
         var isFlipping = false;
         var pageElements = [];
+        var autoFlipTimer = null;
+        var isAutoFlip = true;
+        var isManualClick = false;
 
         // ============================================
-        // LYRICS
+        // YOUR EXACT LYRICS - HINDI + HINGLISH MATCH
         // ============================================
         var LYRICS = [
-            '✨ A new chapter begins',
-            '🌟 You are the sunshine',
-            '🌸 Beautiful soul',
-            '💫 Keep shining bright',
-            '🌹 Grace & elegance',
-            '🎀 Pure happiness',
-            '❤️ Endless love'
+            // ===== YOUR ORIGINAL LYRICS =====
+            {
+                hindi: 'तन्ने मैं लिखूँ रानी दिल की',
+                hinglish: 'Tanne main likhu Rani dil ki'
+            },
+            {
+                hindi: 'या तन्ने मुमताज़ लिखूँगा',
+                hinglish: 'Ya tanne Mumtaz likhunga'
+            },
+            {
+                hindi: 'जे लिखने में बैठ गया तन्ने',
+                hinglish: 'Je likhne mein baith gaya tanne'
+            },
+            {
+                hindi: 'तो पक्का मैं किताब लिखूँगा',
+                hinglish: 'To pakka main kitaab likhunga'
+            },
+            {
+                hindi: 'रे होठां ने गुलाब लिख दूँ',
+                hinglish: 'Re hothan ne gulaab likh dun'
+            },
+            {
+                hindi: 'रे अखियां ने शराब लिखूँगा',
+                hinglish: 'Re akhiyan ne sharaab likhunga'
+            },
+            {
+                hindi: 'चुन्नी में जो मोती जड़रे',
+                hinglish: 'Chunni mein jo moti jadre'
+            },
+            {
+                hindi: 'उसनै छोरी तारा लिखूँ',
+                hinglish: 'Usne chhori taara likhu'
+            },
+            {
+                hindi: 'चाँद फीका लागे से',
+                hinglish: 'Chaand feeka laage se'
+            },
+            {
+                hindi: 'यो रूप कितना प्यारा लिखूँ',
+                hinglish: 'Yo roop kitna pyaara likhu'
+            },
+            {
+                hindi: 'राम का इशारा लिखूँ',
+                hinglish: 'Ram ka ishaara likhu'
+            },
+            {
+                hindi: 'देख्या ना नज़ारा लिखूँ',
+                hinglish: 'Dekhya na nazaara likhu'
+            },
+            {
+                hindi: 'बात छोटी लागे मेरी',
+                hinglish: 'Baat chhoti laage meri'
+            },
+            {
+                hindi: 'काट के दुबारा लिखूँ',
+                hinglish: 'Kaat ke dubaara likhu'
+            },
+            {
+                hindi: 'रे बातां ने अलाप लिखूँगा',
+                hinglish: 'Re baatan ne alaap likhunga'
+            },
+            {
+                hindi: 'जो दिख जा तू ख्वाब लिखूँगा',
+                hinglish: 'Jo dikh ja tu khwaab likhunga'
+            },
+            {
+                hindi: 'हो पूछे ना तू मेरे तै',
+                hinglish: 'Ho poochhe na tu mere tai'
+            },
+            {
+                hindi: 'या आशिक का हाल',
+                hinglish: 'Ya aashiq ka haal'
+            },
+            {
+                hindi: 'रेशम तै ज़्यादा है',
+                hinglish: 'Resham tai zyada hai'
+            },
+            {
+                hindi: 'सुनहरे तेरे बाल',
+                hinglish: 'Sunahre tere baal'
+            },
+            {
+                hindi: 'परियों के देश तै तू आई',
+                hinglish: 'Pariyon ke desh tai tu aayi'
+            },
+            {
+                hindi: 'वीज़ा डाल के',
+                hinglish: 'Visa daal ke'
+            },
+            {
+                hindi: 'रेड मून जैसी ए तू',
+                hinglish: 'Red moon jaisi e tu'
+            },
+            {
+                hindi: 'लागे से कमाल',
+                hinglish: 'Laage se kamaal'
+            },
+            {
+                hindi: 'तन्ने मैं मेरी राधा लिख दूँ',
+                hinglish: 'Tanne main meri Radha likh dun'
+            },
+            {
+                hindi: 'मने मैं घनश्याम लिखूँगा',
+                hinglish: 'Mane main Ghanshyam likhunga'
+            },
+            // ===== YOUR ENGLISH LYRICS =====
+            {
+                hindi: 'कैन्ट लिव विदाउट यू',
+                hinglish: 'Can\'t live without you'
+            },
+            {
+                hindi: 'यू बेबी माइन',
+                hinglish: 'You baby mine'
+            },
+            {
+                hindi: 'इफ यू टच मी',
+                hinglish: 'If you touch me'
+            },
+            {
+                hindi: 'सो आई एम फीलिंग फाइन',
+                hinglish: 'So I\'m feeling fine'
+            },
+            {
+                hindi: 'लिखूँ तेरे बारे',
+                hinglish: 'Likhu tere baare'
+            },
+            {
+                hindi: 'सारी दुनिया के बोल लाऊँ',
+                hinglish: 'Saari duniya ke bol laaun'
+            },
+            {
+                hindi: 'सारी दुनिया ने भूल जाऊँ',
+                hinglish: 'Saari duniya ne bhool jaaun'
+            },
+            {
+                hindi: 'फिर कुछ और ना मैं लिख पाऊँ',
+                hinglish: 'Phir kuch aur na main likh paaun'
+            },
+            {
+                hindi: 'तोड़ के कलम फिर',
+                hinglish: 'Tod ke kalam phir'
+            },
+            {
+                hindi: 'फांसी पे मैं झूल जाऊँ',
+                hinglish: 'Faansi pe main jhool jaaun'
+            }
         ];
 
         // ============================================
@@ -592,10 +831,12 @@
 
             splash.classList.add('hidden');
             bookContainer.classList.add('active');
+            autoIndicator.classList.add('active');
 
             initMusic();
             buildBook();
             openBook();
+            startAutoFlip();
         });
 
         // ============================================
@@ -650,20 +891,22 @@
         }
 
         // ============================================
-        // BUILD BOOK - FIXED
+        // BUILD BOOK
         // ============================================
         function buildBook() {
             book.innerHTML = '';
             pageElements = [];
 
             // Front cover (page 0)
-            var frontPage = createPage('front', 0);
+            var frontPage = createCoverPage('front');
             book.appendChild(frontPage);
             pageElements.push(frontPage);
 
             // Photos 1-6 (pages 1-6)
             for (var i = 0; i < 6; i++) {
-                var photoPage = createPage('photo', i + 1, i);
+                var randomIndex = Math.floor(Math.random() * LYRICS.length);
+                var lyric = LYRICS[randomIndex];
+                var photoPage = createPhotoPage(i + 1, lyric);
                 book.appendChild(photoPage);
                 pageElements.push(photoPage);
             }
@@ -674,13 +917,12 @@
             pageElements.push(birthdayPage);
 
             // Back cover (page 8)
-            var backPage = createPage('back', 0);
+            var backPage = createCoverPage('back');
             book.appendChild(backPage);
             pageElements.push(backPage);
 
             totalPages = pageElements.length;
 
-            // Set initial state - all pages closed except front cover
             for (var j = 0; j < pageElements.length; j++) {
                 var p = pageElements[j];
                 p.style.zIndex = totalPages - j;
@@ -690,49 +932,72 @@
                     p.style.transform = 'rotateY(-180deg)';
                 }
                 p.style.opacity = '1';
+                if (j > 0 && j <= 6) {
+                    p.classList.add('photo-page');
+                }
             }
 
             currentPage = 0;
             updateProgress();
             updateButtons();
+            // Activate first page
+            setTimeout(function() {
+                if (pageElements[0]) {
+                    pageElements[0].classList.add('active');
+                }
+            }, 100);
         }
 
         // ============================================
-        // CREATE PAGE
+        // CREATE COVER PAGE
         // ============================================
-        function createPage(type, idx, lyricIdx) {
+        function createCoverPage(type) {
             var page = document.createElement('div');
             page.className = 'page';
             var inner = document.createElement('div');
             inner.className = 'page-inner';
 
-            if (type === 'front') {
-                inner.innerHTML = `
-                    <div class="polaroid" style="justify-content:center;">
-                        <img src="assets/photos/front.jpg" alt="Front Cover" style="height:72%;width:92%;object-fit:contain;border-radius:2px;">
-                        <div style="margin-top:10px;font-size:1.4rem;font-weight:400;color:#b8860b;letter-spacing:2px;">✨ MY LOVE KOMAL ✨</div>
-                        <div style="font-size:0.6rem;letter-spacing:5px;color:#8a7a6a;font-style:italic;">❤️ Birthday ❤️</div>
-                    </div>
-                `;
-            } else if (type === 'photo') {
-                var num = idx;
-                var lyric = LYRICS[lyricIdx] || '🌟';
-                inner.innerHTML = `
-                    <div class="polaroid">
-                        <img src="assets/photos/pic${num}.jpg" alt="Photo ${num}" style="height:82%;width:100%;object-fit:contain;">
-                        <div class="polaroid-caption">${lyric}</div>
-                    </div>
-                `;
-            } else if (type === 'back') {
-                inner.innerHTML = `
-                    <div class="polaroid" style="justify-content:center;">
-                        <img src="assets/photos/back.jpg" alt="Back Cover" style="height:72%;width:92%;object-fit:contain;border-radius:2px;">
-                        <div style="margin-top:10px;font-size:1.2rem;color:#6a5a4a;font-style:italic;letter-spacing:4px;">🌟 Forever 🌟</div>
-                    </div>
-                `;
-            }
+            var imgSrc = type === 'front' ? 'front.jpg' : 'back.jpg';
+            var title = type === 'front' ? '✨ MY LOVE KOMAL ✨' : '🌟 Forever 🌟';
+            var sub = type === 'front' ? '❤️ Birthday ❤️' : '';
 
+            inner.innerHTML = `
+                <div class="cover-container">
+                    <img src="assets/photos/${imgSrc}" alt="${type} cover">
+                    <div class="cover-title">${title}</div>
+                    <div class="cover-sub">${sub}</div>
+                </div>
+            `;
             page.appendChild(inner);
+            return page;
+        }
+
+        // ============================================
+        // CREATE PHOTO PAGE WITH OVERLAY
+        // ============================================
+        function createPhotoPage(num, lyric) {
+            var page = document.createElement('div');
+            page.className = 'page';
+            var inner = document.createElement('div');
+            inner.className = 'page-inner';
+
+            inner.innerHTML = `
+                <div class="photo-container">
+                    <img src="assets/photos/pic${num}.jpg" alt="Photo ${num}">
+                    <div class="photo-overlay">
+                        <div class="lyrics-line hindi">${lyric.hindi}</div>
+                        <div class="lyrics-divider"></div>
+                        <div class="lyrics-line hinglish">${lyric.hinglish}</div>
+                    </div>
+                </div>
+            `;
+            page.appendChild(inner);
+
+            // Activate overlay after page flip
+            setTimeout(function() {
+                page.classList.add('active');
+            }, 500);
+
             return page;
         }
 
@@ -756,37 +1021,75 @@
         }
 
         // ============================================
+        // AUTO FLIP - 8 SECONDS (FIXED)
+        // ============================================
+        function startAutoFlip() {
+            if (autoFlipTimer) clearTimeout(autoFlipTimer);
+
+            function autoFlip() {
+                if (closing) return;
+                if (currentPage < totalPages - 1) {
+                    flipToPage(currentPage + 1);
+                    autoFlipTimer = setTimeout(autoFlip, 8000);
+                } else {
+                    closeBook();
+                }
+            }
+
+            autoFlipTimer = setTimeout(autoFlip, 8000);
+        }
+
+        function stopAutoFlip() {
+            if (autoFlipTimer) {
+                clearTimeout(autoFlipTimer);
+                autoFlipTimer = null;
+            }
+            isAutoFlip = false;
+            autoIndicator.classList.remove('active');
+        }
+
+        // ============================================
         // OPEN BOOK
         // ============================================
         function openBook() {
             if (bookOpen) return;
             bookOpen = true;
             flipControls.classList.add('active');
-            // Show first page (front cover)
             setTimeout(function() {
                 flipToPage(0);
             }, 400);
         }
 
         // ============================================
-        // FLIP TO PAGE - FIXED
+        // FLIP TO PAGE - FIXED (Auto Flip removed from here)
         // ============================================
         function flipToPage(index) {
             if (isFlipping || closing) return;
             if (index < 0 || index >= totalPages) return;
 
+            // Only stop auto flip on manual button click, not on auto flip
+            if (isManualClick && isAutoFlip) {
+                stopAutoFlip();
+                isManualClick = false;
+            }
+
             isFlipping = true;
 
             for (var i = 0; i < pageElements.length; i++) {
                 var p = pageElements[i];
-                // Pages before or equal to current index are open (0deg)
-                // Pages after current index are closed (-180deg)
                 if (i <= index) {
                     p.style.transform = 'rotateY(0deg)';
                 } else {
                     p.style.transform = 'rotateY(-180deg)';
                 }
                 p.style.zIndex = totalPages - i;
+
+                // Activate overlay for current page
+                if (i === index) {
+                    p.classList.add('active');
+                } else {
+                    p.classList.remove('active');
+                }
             }
 
             currentPage = index;
@@ -817,14 +1120,17 @@
         function closeBook() {
             if (closing) return;
             closing = true;
+            stopAutoFlip();
 
             for (var i = pageElements.length - 1; i >= 0; i--) {
                 var p = pageElements[i];
                 p.style.transform = 'rotateY(-180deg)';
                 p.style.zIndex = totalPages - i;
+                p.classList.remove('active');
             }
 
             flipControls.classList.remove('active');
+            autoIndicator.classList.remove('active');
             fadeOutMusic(function() {
                 finalScreen.classList.add('active');
                 bookContainer.style.display = 'none';
@@ -832,16 +1138,18 @@
         }
 
         // ============================================
-        // BUTTON EVENTS
+        // BUTTON EVENTS - FIXED (Manual click flag)
         // ============================================
         prevBtn.addEventListener('click', function() {
             if (currentPage > 0) {
+                isManualClick = true;
                 flipToPage(currentPage - 1);
             }
         });
 
         nextBtn.addEventListener('click', function() {
             if (currentPage < totalPages - 1) {
+                isManualClick = true;
                 flipToPage(currentPage + 1);
             } else {
                 closeBook();
@@ -856,6 +1164,7 @@
             if (e.key === 'ArrowRight' || e.key === ' ') {
                 e.preventDefault();
                 if (currentPage < totalPages - 1) {
+                    isManualClick = true;
                     flipToPage(currentPage + 1);
                 } else {
                     closeBook();
@@ -863,6 +1172,7 @@
             } else if (e.key === 'ArrowLeft') {
                 e.preventDefault();
                 if (currentPage > 0) {
+                    isManualClick = true;
                     flipToPage(currentPage - 1);
                 }
             }
@@ -874,9 +1184,13 @@
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
                 if (musicEl) musicEl.pause();
+                if (autoFlipTimer) clearTimeout(autoFlipTimer);
             } else {
                 if (musicEl && musicStarted) {
                     musicEl.play().catch(function() {});
+                }
+                if (isAutoFlip && !closing && bookOpen) {
+                    startAutoFlip();
                 }
             }
         });
@@ -898,14 +1212,16 @@
         // ============================================
         window.addEventListener('beforeunload', function() {
             if (musicEl) musicEl.pause();
+            if (autoFlipTimer) clearTimeout(autoFlipTimer);
         });
 
         console.log('❤️ Happy Birthday Komal - Premium Luxury ❤️');
         console.log('✅ All systems ready!');
         console.log('📖 Total pages: 9');
-    })();
+        console.log('🎵 Auto flip: 8 seconds each page');
+        console.log('📝 ' + LYRICS.length + ' lyrics loaded!');
+
+    })(); // <-- IIFE close
 </script>
 </body>
 </html>
-
-</div>
