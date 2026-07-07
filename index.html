@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy Birthday Komal ❤️</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background: #1a0e0b;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+    #app {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      aspect-ratio: 9 / 16;
+      background: #1a0e0b;
+      border-radius: 32px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 0 2px #b8860b33 inset;
+      overflow: hidden;
+      margin: 12px;
+    }
+    #splash {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 30%, #2d1a13, #0f0806);
+      z-index: 100;
+      transition: opacity 0.8s ease;
+      padding: 2rem;
+      text-align: center;
+    }
+    #splash.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #splash .sub-text {
+      font-size: 1.2rem;
+      color: #e4c580;
+      letter-spacing: 3px;
+      font-weight: 300;
+      margin-bottom: 0.3rem;
+      font-family: 'Georgia', serif;
+    }
+    #splash .big-name {
+      font-size: 4rem;
+      background: linear-gradient(135deg, #f9e5b3, #d4af37, #f9e5b3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px #d4af3766;
+      letter-spacing: 8px;
+      font-weight: 900;
+      margin: 0.2rem 0;
+      font-family: 'Georgia', serif;
+    }
+    #splash .sub-text2 {
+      font-size: 1rem;
+      color: #c4a87a;
+      letter-spacing: 4px;
+      font-weight: 300;
+      border-top: 1px solid #d4af3755;
+      padding-top: 0.8rem;
+      width: 80%;
+      margin: 0.5rem auto;
+    }
+    .typewriter {
+      font-size: 1.1rem;
+      color: #f0d9b0;
+      margin: 1rem 0 1.5rem;
+      min-height: 2.5rem;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 2px;
+      border-right: 2px solid #d4af37;
+      padding-right: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+      animation: blinkCursor 0.9s step-end infinite;
+    }
+    @keyframes blinkCursor {
+      0%, 100% { border-color: #d4af37; }
+      50% { border-color: transparent; }
+    }
+    .countdown-big {
+      font-size: 4.5rem;
+      font-weight: 700;
+      color: #f9e5b3;
+      text-shadow: 0 0 40px #d4af37, 0 0 80px #b8860b;
+      animation: pulseGlow 0.8s ease-in-out infinite alternate;
+      margin: 0.3rem 0;
+    }
+    @keyframes pulseGlow {
+      0% { opacity: 0.6; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1.05); }
+    }
+    #heart-btn {
+      background: transparent;
+      border: none;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      margin-top: 0.8rem;
+    }
+    #heart-btn.show {
+      display: flex;
+    }
+    #heart-btn:active { transform: scale(0.92); }
+    .heart-icon {
+      font-size: 4.8rem;
+      filter: drop-shadow(0 0 30px #ff3366);
+      animation: heartPulse 1.2s ease-in-out infinite;
+      line-height: 1;
+    }
+    @keyframes heartPulse {
+      0% { transform: scale(1); }
+      15% { transform: scale(1.2); text-shadow: 0 0 40px #ff3366; }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.15); text-shadow: 0 0 60px #ff6699; }
+      60% { transform: scale(1); }
+      100% { transform: scale(1); }
+    }
+    .heart-label {
+      color: #f0d9b0;
+      font-size: 1.1rem;
+      letter-spacing: 4px;
+      background: #2d1a13aa;
+      padding: 6px 22px;
+      border-radius: 40px;
+      backdrop-filter: blur(4px);
+      border: 1px solid #d4af3766;
+    }
+    #book-container {
+      position: absolute;
+      inset: 0;
+      background: #1a0e0b;
+      z-index: 50;
+      display: none;
+      perspective: 1200px;
+      perspective-origin: center;
+    }
+    #book-container.active { display: block; }
+    #book {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      transition: transform 1.4s cubic-bezier(0.25, 0.1, 0.15, 1);
+      transform: rotateY(0deg);
+    }
+    .page {
+      position: absolute;
+      width: 88%;
+      height: 82%;
+      backface-visibility: hidden;
+      border-radius: 8px 18px 18px 8px;
+      box-shadow: -6px 6px 30px rgba(0,0,0,0.7);
+      background: #fcf3e0;
+      transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.15, 1), opacity 0.8s;
+      transform-origin: left center;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+    }
+    .page-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px 14px 14px 6px;
+      background: #fcf3e0;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 20px #d4af3722;
+    }
+    /* ===== PHOTO STYLE - NO GOLDEN FRAME ===== */
+    .polaroid {
+      width: 95%;
+      height: 90%;
+      background: #fcf3e0;
+      padding: 8px 8px 16px 8px;
+      border-radius: 4px 4px 8px 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+      background: #fcf3e0;
+    }
+    .polaroid img {
+      width: 100%;
+      height: 85%;
+      object-fit: contain;
+      border-radius: 2px;
+      background: #b7a48b;
+    }
+    .polaroid-caption {
+      margin-top: 6px;
+      font-size: 0.7rem;
+      color: #5a3e2b;
+      letter-spacing: 2px;
+      font-weight: 600;
+      background: #fcf3e0;
+      padding: 0 8px;
+      text-transform: uppercase;
+    }
+    .birthday-page {
+      background: radial-gradient(circle at 30% 30%, #fcf3e0, #efdecb);
+      text-align: center;
+      padding: 1rem;
+    }
+    .birthday-page h2 {
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, #b8860b, #d4af37, #f9e5b3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.4rem;
+      letter-spacing: 4px;
+    }
+    .birthday-page .sub {
+      font-size: 1.1rem;
+      color: #5a3e2b;
+      border-top: 1px solid #d4af3766;
+      padding-top: 0.6rem;
+      width: 70%;
+      margin: 0 auto;
+    }
+    .birthday-page .love {
+      margin-top: 1rem;
+      font-size: 1.8rem;
+      color: #b8860b;
+    }
+    #final-screen {
+      position: absolute;
+      inset: 0;
+      z-index: 200;
+      background: radial-gradient(circle at center, #2d1a13, #0f0806);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      color: #f0d9b0;
+    }
+    #final-screen.active { display: flex; }
+    #final-screen .big-heart {
+      font-size: 5rem;
+      filter: drop-shadow(0 0 40px #ff3366);
+      animation: heartPulse 1.6s infinite;
+    }
+    #final-screen h3 {
+      font-size: 2rem;
+      margin: 0.8rem 0 0.4rem;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #f9e5b3, #d4af37);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    #final-screen p {
+      font-size: 1rem;
+      color: #c4a87a;
+      letter-spacing: 3px;
+    }
+    #final-screen .credit {
+      margin-top: 1.4rem;
+      font-size: 0.9rem;
+      color: #b8860b;
+      border-top: 1px solid #d4af3744;
+      padding-top: 1rem;
+      width: 70%;
+    }
+    #eq {
+      position: absolute;
+      bottom: 14px;
+      right: 18px;
+      z-index: 300;
+      display: flex;
+      gap: 4px;
+      align-items: flex-end;
+      height: 24px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    #eq span {
+      display: block;
+      width: 4px;
+      background: #d4af37;
+      border-radius: 4px;
+      animation: eqAnim 0.9s ease-in-out infinite alternate;
+      height: 10px;
+    }
+    #eq span:nth-child(2) { height: 18px; animation-delay: 0.2s; }
+    #eq span:nth-child(3) { height: 14px; animation-delay: 0.5s; }
+    #eq span:nth-child(4) { height: 22px; animation-delay: 0.1s; }
+    #eq span:nth-child(5) { height: 12px; animation-delay: 0.7s; }
+    @keyframes eqAnim {
+      0% { transform: scaleY(0.4); }
+      100% { transform: scaleY(1.2); }
+    }
+    #progress {
+      position: absolute;
+      bottom: 8px;
+      left: 18px;
+      z-index: 300;
+      color: #b8860b99;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      background: #1a0e0b88;
+      padding: 3px 12px;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      border: 1px solid #d4af3733;
+    }
+    @media (max-width: 420px) {
+      #splash .big-name { font-size: 3rem; }
+      .heart-icon { font-size: 4rem; }
+      .birthday-page h2 { font-size: 2.2rem; }
+    }
+    @media (orientation: landscape) and (max-height: 500px) {
+      #app { max-width: 70vh; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <!-- SPLASH SCREEN -->
+  <div id="splash">
+    <div class="sub-text">Happy Birthday Dear</div>
+    <div class="big-name">MY LOVE KOMAL</div>
+    <div class="sub-text2">❤️ Birthday Luxury ❤️</div>
+    <div class="typewriter" id="typewriter">A Special Memory Awaits...</div>
+    <div id="countdown-area" class="countdown-big">3</div>
+    <button id="heart-btn">
+      <span class="heart-icon">❤️</span>
+      <span class="heart-label">Tap To Play</span>
+    </button>
+  </div>
+
+  <!-- BOOK CONTAINER -->
+  <div id="book-container">
+    <div id="book"></div>
+    <div id="eq"><span></span><span></span><span></span><span></span><span></span></div>
+    <div id="progress">1 / 9</div>
+  </div>
+
+  <!-- FINAL SCREEN -->
+  <div id="final-screen">
+    <div class="big-heart">❤️</div>
+    <h3>Thank You For Watching</h3>
+    <p>Made With Love ❤️</p>
+    <div class="credit">— Aniket</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    'use strict';
+
+    const LYRICS = [
+      '✨ A new chapter begins',
+      '🌟 You are the sunshine',
+      '🌸 Beautiful soul',
+      '💫 Keep shining bright',
+      '🌹 Grace & elegance',
+      '🎀 Pure happiness',
+      '❤️ Endless love'
+    ];
+
+    const splash = document.getElementById('splash');
+    const typewriterEl = document.getElementById('typewriter');
+    const countdownArea = document.getElementById('countdown-area');
+    const heartBtn = document.getElementById('heart-btn');
+    const bookContainer = document.getElementById('book-container');
+    const book = document.getElementById('book');
+    const progress = document.getElementById('progress');
+    const finalScreen = document.getElementById('final-screen');
+
+    let currentPage = 0;
+    let totalPages = 0;
+    let isPlaying = false;
+    let musicStarted = false;
+    let musicEl = null;
+    let pageTimer = null;
+    let bookOpen = false;
+    let closing = false;
+
+    // ===== TYPEWRITER =====
+    function typeWriter(text, el, speed) {
+      speed = speed || 70;
+      let i = 0;
+      el.textContent = '';
+      function type() {
+        if (i < text.length) {
+          el.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    // ===== COUNTDOWN =====
+    let countdown = 3;
+    function runCountdown() {
+      countdownArea.textContent = countdown;
+      if (countdown === 0) {
+        countdownArea.style.display = 'none';
+        heartBtn.classList.add('show');
+        return;
+      }
+      countdown--;
+      setTimeout(runCountdown, 800);
+    }
+
+    // ===== INIT =====
+    typeWriter('A Special Memory Awaits...', typewriterEl, 70);
+    setTimeout(runCountdown, 1500);
+
+    // ===== HEART BUTTON CLICK =====
+    heartBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (isPlaying) return;
+      isPlaying = true;
+
+      splash.classList.add('hidden');
+      bookContainer.classList.add('active');
+
+      initMusic();
+      buildBook();
+      openBook();
+    });
+
+    // ===== MUSIC =====
+    function initMusic() {
+      if (musicStarted) return;
+      musicStarted = true;
+      try {
+        musicEl = new Audio('assets/music/romantic_track.mp3');
+        musicEl.loop = false;
+        musicEl.volume = 0;
+        musicEl.play().then(function() {
+          fadeInMusic();
+        }).catch(function() {
+          console.log('Music load failed, continuing...');
+        });
+      } catch (_) {
+        console.log('Music error, continuing...');
+      }
+    }
+
+    function fadeInMusic() {
+      if (!musicEl) return;
+      var vol = 0;
+      var interval = setInterval(function() {
+        if (vol < 0.6) {
+          vol += 0.04;
+          musicEl.volume = Math.min(vol, 0.6);
+        } else {
+          clearInterval(interval);
+        }
+      }, 120);
+    }
+
+    function fadeOutMusic(callback) {
+      if (!musicEl) {
+        if (callback) callback();
+        return;
+      }
+      var vol = musicEl.volume;
+      var interval = setInterval(function() {
+        if (vol > 0.05) {
+          vol -= 0.05;
+          musicEl.volume = Math.max(vol, 0);
+        } else {
+          clearInterval(interval);
+          musicEl.pause();
+          if (callback) callback();
+        }
+      }, 80);
+    }
+
+    // ===== BUILD BOOK =====
+    function buildBook() {
+      book.innerHTML = '';
+      addPage('front');
+      for (var i = 0; i < 6; i++) {
+        addPage('photo', i + 1, i);
+      }
+      addBirthdayPage();
+      addPage('back');
+      totalPages = book.children.length;
+      var pages = book.querySelectorAll('.page');
+      for (var j = 0; j < pages.length; j++) {
+        var p = pages[j];
+        if (j === 0) {
+          p.style.transform = 'rotateY(0deg)';
+        } else {
+          p.style.transform = 'rotateY(-180deg)';
+        }
+        p.style.zIndex = totalPages - j;
+        p.style.opacity = '1';
+      }
+      currentPage = 0;
+      updateProgress();
+    }
+
+    function addPage(type, idx, lyricIdx) {
+      var page = document.createElement('div');
+      page.className = 'page';
+      var inner = document.createElement('div');
+      inner.className = 'page-inner';
+
+      if (type === 'front') {
+        inner.innerHTML = `
+          <div class="polaroid" style="justify-content:center;background:#fcf3e0;">
+            <img src="assets/photos/front.jpg" alt="Front" style="height:75%;width:95%;object-fit:contain;border-radius:4px;">
+            <div style="margin-top:8px;font-size:1.4rem;font-weight:700;color:#b8860b;">✨ MY LOVE KOMAL ✨</div>
+            <div style="font-size:0.7rem;letter-spacing:3px;color:#5a3e2b;">❤️ Birthday ❤️</div>
+          </div>
+        `;
+      } else if (type === 'photo') {
+        var num = idx;
+        var lyric = LYRICS[lyricIdx] || '🌟';
+        inner.innerHTML = `
+          <div class="polaroid">
+            <img src="assets/photos/pic${num}.jpg" alt="Photo ${num}" style="height:85%;width:100%;object-fit:contain;">
+            <div class="polaroid-caption">${lyric}</div>
+          </div>
+        `;
+      } else if (type === 'back') {
+        inner.innerHTML = `
+          <div class="polaroid" style="justify-content:center;background:#fcf3e0;">
+            <img src="assets/photos/back.jpg" alt="Back" style="height:75%;width:95%;object-fit:contain;border-radius:4px;">
+            <div style="margin-top:8px;font-size:1.2rem;color:#5a3e2b;">🌟 Forever 🌟</div>
+          </div>
+        `;
+      }
+      page.appendChild(inner);
+      book.appendChild(page);
+    }
+
+    function addBirthdayPage() {
+      var page = document.createElement('div');
+      page.className = 'page';
+      var inner = document.createElement('div');
+      inner.className = 'page-inner birthday-page';
+      inner.innerHTML = `
+        <h2>🎂 Happy Birthday</h2>
+        <div style="font-size:2.2rem;margin:0.2rem 0;">MY LOVE KOMAL ❤️</div>
+        <div class="sub">Wishing you all the love & happiness</div>
+        <div class="love">❤️ Made With Love ❤️</div>
+        <div style="margin-top:0.8rem;font-size:0.9rem;color:#b8860b;">— Aniket</div>
+      `;
+      page.appendChild(inner);
+      var children = book.children;
+      if (children.length >= 7) {
+        book.insertBefore(page, children[7]);
+      } else {
+        book.appendChild(page);
+      }
+    }
+
+    // ===== BOOK NAVIGATION =====
+    function openBook() {
+      if (bookOpen) return;
+      bookOpen = true;
+      setTimeout(function() {
+        flipToPage(1);
+      }, 800);
+    }
+
+    function flipToPage(index) {
+      if (closing) return;
+      var pages = book.querySelectorAll('.page');
+      if (index >= pages.length) {
+        closeBook();
+        return;
+      }
+      for (var i = 0; i < pages.length; i++) {
+        var p = pages[i];
+        if (i <= index) {
+          p.style.transform = 'rotateY(0deg)';
+        } else {
+          p.style.transform = 'rotateY(-180deg)';
+        }
+        p.style.zIndex = totalPages - i;
+      }
+      currentPage = index;
+      updateProgress();
+
+      // ===== TIME DOUBLED (2x) =====
+      var delay = 5600; // default 6 seconds
+      if (index === 0) delay = 4000;  // front cover - 4 seconds
+      else if (index === 1) delay = 5200; // photo 1 - 5.2 seconds
+      else if (index === 7) delay = 8000; // birthday page - 8 seconds
+      else if (index === 8) delay = 5000; // back cover - 5 seconds
+      else delay = 5600; // all photos - 5.6 seconds
+
+      if (pageTimer) clearTimeout(pageTimer);
+      pageTimer = setTimeout(function() {
+        if (!closing) flipToPage(index + 1);
+      }, delay);
+    }
+
+    function closeBook() {
+      if (closing) return;
+      closing = true;
+      if (pageTimer) clearTimeout(pageTimer);
+      var pages = book.querySelectorAll('.page');
+      for (var i = pages.length - 1; i >= 0; i--) {
+        var p = pages[i];
+        p.style.transform = 'rotateY(-180deg)';
+        p.style.zIndex = totalPages - i;
+      }
+      fadeOutMusic(function() {
+        finalScreen.classList.add('active');
+        bookContainer.style.display = 'none';
+      });
+    }
+
+    function updateProgress() {
+      var total = totalPages || 9;
+      progress.textContent = (Math.min(currentPage + 1, total)) + ' / ' + total;
+    }
+
+    // ===== VISIBILITY =====
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        if (musicEl) musicEl.pause();
+      } else {
+        if (musicEl && musicStarted) {
+          musicEl.play().catch(function() {});
+        }
+      }
+    });
+
+    // ===== PRELOAD IMAGES =====
+    function preloadImages() {
+      var names = ['front', 'back', 'pic1', 'pic2', 'pic3', 'pic4', 'pic5', 'pic6'];
+      for (var i = 0; i < names.length; i++) {
+        var img = new Image();
+        img.src = 'assets/photos/' + names[i] + '.jpg';
+      }
+    }
+    preloadImages();
+
+    // ===== CLEANUP =====
+    window.addEventListener('beforeunload', function() {
+      if (musicEl) musicEl.pause();
+      if (pageTimer) clearTimeout(pageTimer);
+    });
+
+    console.log('Happy Birthday Komal ❤️ V6 ULTRA LUXURY');
+  })();
+</script>
+</body>
+  </html>
