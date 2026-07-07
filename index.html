@@ -473,9 +473,9 @@
     (function() {
         'use strict';
 
-        // ===========================
+        // ============================================
         // DOM ELEMENTS
-        // ===========================
+        // ============================================
         var splash = document.getElementById('splash');
         var typewriterEl = document.getElementById('typewriter');
         var countdownArea = document.getElementById('countdown-area');
@@ -488,9 +488,9 @@
         var prevBtn = document.getElementById('prevBtn');
         var nextBtn = document.getElementById('nextBtn');
 
-        // ===========================
+        // ============================================
         // STATE
-        // ===========================
+        // ============================================
         var currentPage = 0;
         var totalPages = 0;
         var isPlaying = false;
@@ -500,9 +500,22 @@
         var closing = false;
         var isFlipping = false;
 
-        // ===========================
+        // ============================================
+        // LYRICS
+        // ============================================
+        var LYRICS = [
+            '✨ A new chapter begins',
+            '🌟 You are the sunshine',
+            '🌸 Beautiful soul',
+            '💫 Keep shining bright',
+            '🌹 Grace & elegance',
+            '🎀 Pure happiness',
+            '❤️ Endless love'
+        ];
+
+        // ============================================
         // TYPEWRITER
-        // ===========================
+        // ============================================
         function typeWriter(text, el, speed) {
             speed = speed || 70;
             var i = 0;
@@ -517,9 +530,9 @@
             type();
         }
 
-        // ===========================
+        // ============================================
         // COUNTDOWN
-        // ===========================
+        // ============================================
         var countdown = 3;
 
         function runCountdown() {
@@ -537,9 +550,9 @@
             setTimeout(runCountdown, 800);
         }
 
-        // ===========================
+        // ============================================
         // INIT
-        // ===========================
+        // ============================================
         console.log('🚀 App Starting...');
         typeWriter('A Special Memory Awaits...', typewriterEl, 70);
 
@@ -548,9 +561,9 @@
             runCountdown();
         }, 1200);
 
-        // ===========================
+        // ============================================
         // HEART BUTTON CLICK
-        // ===========================
+        // ============================================
         heartBtn.addEventListener('click', function(e) {
             e.preventDefault();
             if (isPlaying) return;
@@ -564,9 +577,9 @@
             openBook();
         });
 
-        // ===========================
+        // ============================================
         // MUSIC
-        // ===========================
+        // ============================================
         function initMusic() {
             if (musicStarted) return;
             musicStarted = true;
@@ -606,27 +619,4 @@
             var interval = setInterval(function() {
                 if (vol > 0.05) {
                     vol -= 0.05;
-                    musicEl.volume = Math.max(vol, 0);
-                } else {
-                    clearInterval(interval);
-                    musicEl.pause();
-                    if (callback) callback();
-                }
-            }, 80);
-        }
-
-        // ===========================
-        // LYRICS
-        // ===========================
-        var LYRICS = [
-            '✨ A new chapter begins',
-            '🌟 You are the sunshine',
-            '🌸 Beautiful soul',
-            '💫 Keep shining bright',
-            '🌹 Grace & elegance',
-            '🎀 Pure happiness',
-            '❤️ Endless love'
-        ];
-
-        // ===========================
-        // BUIL
+                    musicEl.volume = Ma
