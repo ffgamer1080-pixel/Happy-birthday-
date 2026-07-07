@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Happy Birthday Komal ❤️</title>
-  <!-- No frameworks, no Bootstrap, no Tailwind, no jQuery -->
   <style>
     * {
       margin: 0;
@@ -13,7 +12,6 @@
       user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
-
     body {
       background: #1a0e0b;
       min-height: 100vh;
@@ -24,8 +22,6 @@
       overflow: hidden;
       touch-action: manipulation;
     }
-
-    /* main canvas – all screens stack */
     #app {
       position: relative;
       width: 100%;
@@ -37,8 +33,6 @@
       overflow: hidden;
       margin: 12px;
     }
-
-    /* splash / loading */
     #splash {
       position: absolute;
       inset: 0;
@@ -94,7 +88,6 @@
       0%, 100% { border-color: #d4af37; }
       50% { border-color: transparent; }
     }
-
     .countdown-big {
       font-size: 4.5rem;
       font-weight: 700;
@@ -107,18 +100,19 @@
       0% { opacity: 0.6; transform: scale(0.95); }
       100% { opacity: 1; transform: scale(1.05); }
     }
-
-    /* heart button */
     #heart-btn {
       background: transparent;
       border: none;
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       gap: 10px;
       cursor: pointer;
       transition: transform 0.2s;
       margin-top: 1.2rem;
+    }
+    #heart-btn.show {
+      display: flex;
     }
     #heart-btn:active { transform: scale(0.92); }
     .heart-icon {
@@ -145,22 +139,16 @@
       backdrop-filter: blur(4px);
       border: 1px solid #d4af3766;
     }
-
-    /* main book container (hidden until heart tap) */
     #book-container {
       position: absolute;
       inset: 0;
       background: #1a0e0b;
       z-index: 50;
       display: none;
-      /* book 3D perspective */
       perspective: 1200px;
       perspective-origin: center;
     }
-    #book-container.active {
-      display: block;
-    }
-
+    #book-container.active { display: block; }
     #book {
       position: absolute;
       inset: 0;
@@ -171,7 +159,6 @@
       transition: transform 1.4s cubic-bezier(0.25, 0.1, 0.15, 1);
       transform: rotateY(0deg);
     }
-    /* book pages stack */
     .page {
       position: absolute;
       width: 88%;
@@ -201,8 +188,6 @@
       justify-content: center;
       box-shadow: inset 0 0 20px #d4af3722;
     }
-
-    /* polaroid frame */
     .polaroid {
       width: 92%;
       height: 88%;
@@ -224,7 +209,6 @@
       border-radius: 4px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       background: #b7a48b;
-      transition: transform 0.2s;
     }
     .polaroid-caption {
       margin-top: 8px;
@@ -236,8 +220,6 @@
       padding: 0 8px;
       text-transform: uppercase;
     }
-
-    /* birthday page */
     .birthday-page {
       background: radial-gradient(circle at 30% 30%, #fcf3e0, #efdecb);
       text-align: center;
@@ -264,8 +246,6 @@
       font-size: 1.8rem;
       color: #b8860b;
     }
-
-    /* final screen */
     #final-screen {
       position: absolute;
       inset: 0;
@@ -279,9 +259,7 @@
       padding: 2rem;
       color: #f0d9b0;
     }
-    #final-screen.active {
-      display: flex;
-    }
+    #final-screen.active { display: flex; }
     #final-screen .big-heart {
       font-size: 5rem;
       filter: drop-shadow(0 0 40px #ff3366);
@@ -308,8 +286,6 @@
       padding-top: 1rem;
       width: 70%;
     }
-
-    /* equalizer (music indicator) */
     #eq {
       position: absolute;
       bottom: 14px;
@@ -338,8 +314,6 @@
       0% { transform: scaleY(0.4); }
       100% { transform: scaleY(1.2); }
     }
-
-    /* progress & page number */
     #progress {
       position: absolute;
       bottom: 8px;
@@ -354,8 +328,6 @@
       backdrop-filter: blur(4px);
       border: 1px solid #d4af3733;
     }
-
-    /* responsiveness */
     @media (max-width: 420px) {
       #splash h1 { font-size: 2.6rem; }
       .heart-icon { font-size: 4rem; }
@@ -367,32 +339,25 @@
   </style>
 </head>
 <body>
-
 <div id="app">
-
-  <!-- SPLASH SCREEN -->
+  <!-- SPLASH -->
   <div id="splash">
     <h1>✨ KOMAL</h1>
     <div class="splash-sub">❤️ Birthday Luxury ❤️</div>
     <div class="typewriter" id="typewriter">A Special Memory Awaits...</div>
     <div id="countdown-area" class="countdown-big">3</div>
-    <button id="heart-btn" style="display:none;">
+    <button id="heart-btn">
       <span class="heart-icon">❤️</span>
       <span class="heart-label">Tap To Play</span>
     </button>
   </div>
-
-  <!-- BOOK CONTAINER -->
+  <!-- BOOK -->
   <div id="book-container">
-    <div id="book">
-      <!-- pages will be injected by JS -->
-    </div>
-    <!-- equalizer -->
+    <div id="book"></div>
     <div id="eq"><span></span><span></span><span></span><span></span><span></span></div>
     <div id="progress">1 / 9</div>
   </div>
-
-  <!-- FINAL SCREEN -->
+  <!-- FINAL -->
   <div id="final-screen">
     <div class="big-heart">❤️</div>
     <h3>Thank You For Watching</h3>
@@ -400,16 +365,10 @@
     <div class="credit">— Aniket</div>
   </div>
 </div>
-
 <script>
   (function() {
-    "use strict";
+    'use strict';
 
-    // ---- CONFIG ----
-    const PHOTOS = [
-      'front.jpg', 'pic1.jpg', 'pic2.jpg', 'pic3.jpg', 
-      'pic4.jpg', 'pic5.jpg', 'pic6.jpg', 'back.jpg'
-    ];
     const LYRICS = [
       '✨ A new chapter begins',
       '🌟 You are the sunshine',
@@ -417,23 +376,9 @@
       '💫 Keep shining bright',
       '🌹 Grace & elegance',
       '🎀 Pure happiness',
-      '❤️ Endless love',
-      '📖 Forever cherished'
+      '❤️ Endless love'
     ];
-    const BIRTHDAY_INDEX = 7; // after 6 photos, insert birthday page
 
-    // state
-    let currentPage = 0;
-    let totalPages = 0;
-    let isPlaying = false;
-    let musicStarted = false;
-    let musicEl = null;
-    let pageTimer = null;
-    let bookOpen = false;
-    let closing = false;
-    let audioCtx = null;
-
-    const app = document.getElementById('app');
     const splash = document.getElementById('splash');
     const typewriterEl = document.getElementById('typewriter');
     const countdownArea = document.getElementById('countdown-area');
@@ -443,8 +388,17 @@
     const progress = document.getElementById('progress');
     const finalScreen = document.getElementById('final-screen');
 
-    // ---- typewriter ----
-    function typeWriter(text, el, speed = 80) {
+    let currentPage = 0;
+    let totalPages = 0;
+    let isPlaying = false;
+    let musicStarted = false;
+    let musicEl = null;
+    let pageTimer = null;
+    let bookOpen = false;
+    let closing = false;
+
+    function typeWriter(text, el, speed) {
+      speed = speed || 70;
       let i = 0;
       el.textContent = '';
       function type() {
@@ -457,40 +411,34 @@
       type();
     }
 
-    // ---- countdown ----
     let countdown = 3;
     function runCountdown() {
       countdownArea.textContent = countdown;
       if (countdown === 0) {
         countdownArea.style.display = 'none';
-        heartBtn.style.display = 'flex';
+        heartBtn.classList.add('show');
         return;
       }
       countdown--;
       setTimeout(runCountdown, 800);
     }
 
-    // init splash
     typeWriter('A Special Memory Awaits...', typewriterEl, 70);
-    setTimeout(() => {
-      runCountdown();
-    }, 1200);
+    setTimeout(runCountdown, 1200);
 
-    // ---- Heart button tap ----
     heartBtn.addEventListener('click', function(e) {
       e.preventDefault();
       if (isPlaying) return;
       isPlaying = true;
+
       splash.classList.add('hidden');
       bookContainer.classList.add('active');
-      // start music
+
       initMusic();
-      // start book
       buildBook();
       openBook();
     });
 
-    // ---- Music ----
     function initMusic() {
       if (musicStarted) return;
       musicStarted = true;
@@ -498,16 +446,16 @@
         musicEl = new Audio('assets/music/romantic_track.mp3');
         musicEl.loop = false;
         musicEl.volume = 0;
-        musicEl.play().then(() => {
+        musicEl.play().then(function() {
           fadeInMusic();
-        }).catch(() => {});
-      } catch (e) {}
+        }).catch(function() {});
+      } catch (_) {}
     }
 
     function fadeInMusic() {
       if (!musicEl) return;
-      let vol = 0;
-      const interval = setInterval(() => {
+      var vol = 0;
+      var interval = setInterval(function() {
         if (vol < 0.6) {
           vol += 0.04;
           musicEl.volume = Math.min(vol, 0.6);
@@ -518,9 +466,12 @@
     }
 
     function fadeOutMusic(callback) {
-      if (!musicEl) { if (callback) callback(); return; }
-      let vol = musicEl.volume;
-      const interval = setInterval(() => {
+      if (!musicEl) {
+        if (callback) callback();
+        return;
+      }
+      var vol = musicEl.volume;
+      var interval = setInterval(function() {
         if (vol > 0.05) {
           vol -= 0.05;
           musicEl.volume = Math.max(vol, 0);
@@ -532,41 +483,34 @@
       }, 80);
     }
 
-    // ---- Build Book Pages ----
     function buildBook() {
       book.innerHTML = '';
-      // front cover
-      addPage('front', 0);
-      // photos 1-6
-      for (let i = 0; i < 6; i++) {
-        addPage('photo', i+1, i);
+      addPage('front');
+      for (var i = 0; i < 6; i++) {
+        addPage('photo', i + 1, i);
       }
-      // birthday page (inside)
       addBirthdayPage();
-      // back cover
-      addPage('back', 0);
+      addPage('back');
       totalPages = book.children.length;
-      // set all pages to closed (rotateY 0) except first front cover visible
-      const pages = book.querySelectorAll('.page');
-      pages.forEach((p, idx) => {
-        if (idx === 0) {
+      var pages = book.querySelectorAll('.page');
+      for (var j = 0; j < pages.length; j++) {
+        var p = pages[j];
+        if (j === 0) {
           p.style.transform = 'rotateY(0deg)';
-          p.style.zIndex = totalPages - idx;
         } else {
           p.style.transform = 'rotateY(-180deg)';
-          p.style.zIndex = totalPages - idx;
         }
+        p.style.zIndex = totalPages - j;
         p.style.opacity = '1';
-      });
-      // set current
+      }
       currentPage = 0;
       updateProgress();
     }
 
     function addPage(type, idx, lyricIdx) {
-      const page = document.createElement('div');
+      var page = document.createElement('div');
       page.className = 'page';
-      const inner = document.createElement('div');
+      var inner = document.createElement('div');
       inner.className = 'page-inner';
 
       if (type === 'front') {
@@ -578,8 +522,8 @@
           </div>
         `;
       } else if (type === 'photo') {
-        const num = idx;
-        const lyric = LYRICS[lyricIdx] || '🌟';
+        var num = idx;
+        var lyric = LYRICS[lyricIdx] || '🌟';
         inner.innerHTML = `
           <div class="polaroid">
             <img src="assets/photos/pic${num}.jpg" alt="Photo ${num}" style="height:78%;width:100%;object-fit:cover;">
@@ -599,9 +543,9 @@
     }
 
     function addBirthdayPage() {
-      const page = document.createElement('div');
+      var page = document.createElement('div');
       page.className = 'page';
-      const inner = document.createElement('div');
+      var inner = document.createElement('div');
       inner.className = 'page-inner birthday-page';
       inner.innerHTML = `
         <h2>🎂 Happy Birthday</h2>
@@ -611,8 +555,7 @@
         <div style="margin-top:0.8rem;font-size:0.9rem;color:#b8860b;">— Aniket</div>
       `;
       page.appendChild(inner);
-      // insert after photo 6 (index 7)
-      const children = book.children;
+      var children = book.children;
       if (children.length >= 7) {
         book.insertBefore(page, children[7]);
       } else {
@@ -620,51 +563,43 @@
       }
     }
 
-    // ---- Book open / page flip ----
     function openBook() {
       if (bookOpen) return;
       bookOpen = true;
-      // front cover visible, flip to show first page
-      setTimeout(() => {
+      setTimeout(function() {
         flipToPage(1);
       }, 800);
     }
 
     function flipToPage(index) {
       if (closing) return;
-      const pages = book.querySelectorAll('.page');
+      var pages = book.querySelectorAll('.page');
       if (index >= pages.length) {
-        // end of book -> close
         closeBook();
         return;
       }
-      // flip all pages before index to 0deg, current to -180deg
-      for (let i = 0; i < pages.length; i++) {
-        const p = pages[i];
+      for (var i = 0; i < pages.length; i++) {
+        var p = pages[i];
         if (i <= index) {
           p.style.transform = 'rotateY(0deg)';
-          p.style.zIndex = totalPages - i;
         } else {
           p.style.transform = 'rotateY(-180deg)';
-          p.style.zIndex = totalPages - i;
         }
+        p.style.zIndex = totalPages - i;
       }
       currentPage = index;
       updateProgress();
 
-      // schedule next page
-      let delay = 2800;
+      var delay = 2800;
       if (index === 0) delay = 2000;
       else if (index === 1) delay = 2600;
-      else if (index === 7) delay = 4000; // birthday page
-      else if (index === 8) delay = 2500; // back cover
+      else if (index === 7) delay = 4000;
+      else if (index === 8) delay = 2500;
       else delay = 2800;
 
       if (pageTimer) clearTimeout(pageTimer);
-      pageTimer = setTimeout(() => {
-        if (!closing) {
-          flipToPage(index + 1);
-        }
+      pageTimer = setTimeout(function() {
+        if (!closing) flipToPage(index + 1);
       }, delay);
     }
 
@@ -672,38 +607,49 @@
       if (closing) return;
       closing = true;
       if (pageTimer) clearTimeout(pageTimer);
-      // close all pages
-      const pages = book.querySelectorAll('.page');
-      for (let i = pages.length - 1; i >= 0; i--) {
-        const p = pages[i];
+      var pages = book.querySelectorAll('.page');
+      for (var i = pages.length - 1; i >= 0; i--) {
+        var p = pages[i];
         p.style.transform = 'rotateY(-180deg)';
         p.style.zIndex = totalPages - i;
       }
-      // fade out music
-      fadeOutMusic(() => {
-        // show final screen
+      fadeOutMusic(function() {
         finalScreen.classList.add('active');
         bookContainer.style.display = 'none';
       });
     }
 
     function updateProgress() {
-      const total = totalPages || 9;
-      progress.textContent = `${Math.min(currentPage+1, total)} / ${total}`;
+      var total = totalPages || 9;
+      progress.textContent = (Math.min(currentPage + 1, total)) + ' / ' + total;
     }
 
-    // ---- Pause / Resume (visibility) ----
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         if (musicEl) musicEl.pause();
       } else {
-        if (musicEl && musicStarted) musicEl.play().catch(()=>{});
+        if (musicEl && musicStarted) {
+          musicEl.play().catch(function() {});
+        }
       }
     });
 
-    // ---- Preload images (optional) ----
     function preloadImages() {
-      const names = ['front','back','pic1','pic2','pic3','pic4','pic5','pic6'];
-      names.forEach(n => {
-        const img = new Image();
-        img.src = `assets/photos/${
+      var names = ['front', 'back', 'pic1', 'pic2', 'pic3', 'pic4', 'pic5', 'pic6'];
+      for (var i = 0; i < names.length; i++) {
+        var img = new Image();
+        img.src = 'assets/photos/' + names[i] + '.jpg';
+      }
+    }
+    preloadImages();
+
+    window.addEventListener('beforeunload', function() {
+      if (musicEl) musicEl.pause();
+      if (pageTimer) clearTimeout(pageTimer);
+    });
+
+    console.log('Happy Birthday Komal ❤️ V6 ULTRA LUXURY');
+  })();
+</script>
+</body>
+</html>
