@@ -51,7 +51,6 @@
             opacity: 0;
             pointer-events: none;
         }
-
         .sub-text {
             font-size: 1rem;
             color: #b8a08a;
@@ -173,63 +172,76 @@
             font-weight: 300;
         }
 
-        /* ===== BOOK ===== */
+        /* ===== BOOK CONTAINER - 3D FIXED ===== */
         #book-container {
             position: absolute;
             inset: 0;
             background: #0d0a08;
             z-index: 50;
             display: none;
-            perspective: 1400px;
+            perspective: 1500px;
+            perspective-origin: center 45%;
         }
-        #book-container.active { display: block; }
+        #book-container.active {
+            display: block;
+        }
+
         #book {
             position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform-style: preserve-3d;
-        }
-        .page {
-            position: absolute;
+            top: 50%;
+            left: 50%;
             width: 86%;
             height: 80%;
+            transform: translate(-50%, -50%) rotateY(0deg);
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* ===== PAGES - REAL BOOK STYLE ===== */
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             backface-visibility: hidden;
-            border-radius: 4px 16px 16px 4px;
-            box-shadow: -8px 8px 40px rgba(0,0,0,0.7);
+            border-radius: 4px 12px 12px 4px;
             background: #fcf6ed;
-            transition: transform 1.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: -4px 4px 20px rgba(0,0,0,0.4), inset -2px 0 15px rgba(0,0,0,0.05);
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
             transform-origin: left center;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 8px;
+            padding: 10px;
+            will-change: transform;
         }
+
         .page-inner {
             width: 100%;
             height: 100%;
-            border-radius: 2px 12px 12px 2px;
+            border-radius: 2px 8px 8px 2px;
             background: #fcf6ed;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.03);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.03);
         }
+
+        /* ===== POLAROID STYLE ===== */
         .polaroid {
             width: 92%;
             height: 88%;
             background: #fcf6ed;
-            padding: 12px 12px 22px 12px;
-            border-radius: 2px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 12px 12px 20px 12px;
+            border-radius: 3px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.12);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            background: #fcf6ed;
         }
         .polaroid img {
             width: 100%;
@@ -239,14 +251,16 @@
             background: #e8ddd0;
         }
         .polaroid-caption {
-            margin-top: 12px;
-            font-size: 0.75rem;
+            margin-top: 10px;
+            font-size: 0.7rem;
             color: #6a5a4a;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             font-weight: 400;
             text-transform: uppercase;
             font-style: italic;
         }
+
+        /* ===== BIRTHDAY PAGE ===== */
         .birthday-page {
             background: radial-gradient(ellipse at 30% 30%, #fcf6ed, #efe4d0);
             text-align: center;
@@ -274,6 +288,19 @@
             margin-top: 1rem;
             font-size: 2rem;
             color: #b8860b;
+        }
+
+        /* ===== BOOK SPINE EFFECT ===== */
+        .page::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.08), transparent);
+            pointer-events: none;
+            border-radius: 4px 0 0 4px;
         }
 
         /* ===== FINAL SCREEN ===== */
@@ -336,21 +363,21 @@
         #flip-controls.active { display: flex; }
         .flip-btn {
             pointer-events: auto;
-            background: rgba(20, 15, 12, 0.7);
+            background: rgba(20, 15, 12, 0.75);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             color: #d4af37;
             padding: 12px 18px;
             border-radius: 40px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 4px;
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.3s ease;
-            min-width: 90px;
+            min-width: 85px;
             font-weight: 300;
         }
-        .flip-btn:active { transform: scale(0.92); }
+        .flip-btn:active { transform: scale(0.92); background: rgba(212, 175, 55, 0.15); }
         .flip-btn:disabled {
             opacity: 0.2;
             cursor: not-allowed;
@@ -358,11 +385,11 @@
         }
         .flip-btn.prev {
             border-radius: 40px 8px 8px 40px;
-            border-left: 2px solid rgba(212, 175, 55, 0.2);
+            border-left: 2px solid rgba(212, 175, 55, 0.3);
         }
         .flip-btn.next {
             border-radius: 8px 40px 40px 8px;
-            border-right: 2px solid rgba(212, 175, 55, 0.2);
+            border-right: 2px solid rgba(212, 175, 55, 0.3);
         }
 
         /* ===== EQUALIZER & PROGRESS ===== */
@@ -402,7 +429,7 @@
             color: #6a5a4a;
             font-size: 0.6rem;
             letter-spacing: 4px;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.5);
             padding: 3px 16px;
             border-radius: 20px;
             backdrop-filter: blur(8px);
@@ -410,7 +437,6 @@
             font-weight: 300;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 420px) {
             .big-name { font-size: 3rem; }
             .heart-icon { font-size: 4.2rem; }
@@ -418,16 +444,12 @@
             .sub-text { font-size: 0.85rem; letter-spacing: 4px; }
             .typewriter { font-size: 0.85rem; }
             .countdown-big { font-size: 4rem; }
-            .flip-btn {
-                padding: 10px 14px;
-                font-size: 0.75rem;
-                min-width: 70px;
-                letter-spacing: 2px;
-            }
+            .flip-btn { padding: 10px 14px; font-size: 0.7rem; min-width: 65px; letter-spacing: 2px; }
             #flip-controls { padding: 0 12px; bottom: 60px; }
         }
         @media (max-width: 380px) {
             .big-name { font-size: 2.5rem; }
+            #book { width: 92%; height: 76%; }
         }
     </style>
 </head>
@@ -467,7 +489,6 @@
         <p>Made With Love ❤️</p>
         <div class="credit">— Aniket</div>
     </div>
-</div>
 <script>
     (function() {
         'use strict';
@@ -498,6 +519,7 @@
         var bookOpen = false;
         var closing = false;
         var isFlipping = false;
+        var pageElements = [];
 
         // ============================================
         // LYRICS
@@ -628,36 +650,45 @@
         }
 
         // ============================================
-        // BUILD BOOK
+        // BUILD BOOK - FIXED
         // ============================================
         function buildBook() {
             book.innerHTML = '';
+            pageElements = [];
 
-            // Front cover
-            addPage('front');
+            // Front cover (page 0)
+            var frontPage = createPage('front', 0);
+            book.appendChild(frontPage);
+            pageElements.push(frontPage);
 
-            // Photos 1-6
+            // Photos 1-6 (pages 1-6)
             for (var i = 0; i < 6; i++) {
-                addPage('photo', i + 1, i);
+                var photoPage = createPage('photo', i + 1, i);
+                book.appendChild(photoPage);
+                pageElements.push(photoPage);
             }
 
-            // Birthday page
-            addBirthdayPage();
+            // Birthday page (page 7)
+            var birthdayPage = createBirthdayPage();
+            book.appendChild(birthdayPage);
+            pageElements.push(birthdayPage);
 
-            // Back cover
-            addPage('back');
+            // Back cover (page 8)
+            var backPage = createPage('back', 0);
+            book.appendChild(backPage);
+            pageElements.push(backPage);
 
-            totalPages = book.children.length;
+            totalPages = pageElements.length;
 
-            var pages = book.querySelectorAll('.page');
-            for (var j = 0; j < pages.length; j++) {
-                var p = pages[j];
+            // Set initial state - all pages closed except front cover
+            for (var j = 0; j < pageElements.length; j++) {
+                var p = pageElements[j];
+                p.style.zIndex = totalPages - j;
                 if (j === 0) {
                     p.style.transform = 'rotateY(0deg)';
                 } else {
                     p.style.transform = 'rotateY(-180deg)';
                 }
-                p.style.zIndex = totalPages - j;
                 p.style.opacity = '1';
             }
 
@@ -667,9 +698,9 @@
         }
 
         // ============================================
-        // ADD PAGE
+        // CREATE PAGE
         // ============================================
-        function addPage(type, idx, lyricIdx) {
+        function createPage(type, idx, lyricIdx) {
             var page = document.createElement('div');
             page.className = 'page';
             var inner = document.createElement('div');
@@ -678,9 +709,9 @@
             if (type === 'front') {
                 inner.innerHTML = `
                     <div class="polaroid" style="justify-content:center;">
-                        <img src="assets/photos/front.jpg" alt="Front" style="height:70%;width:90%;object-fit:contain;border-radius:2px;">
-                        <div style="margin-top:10px;font-size:1.5rem;font-weight:400;color:#b8860b;letter-spacing:2px;">✨ MY LOVE KOMAL ✨</div>
-                        <div style="font-size:0.65rem;letter-spacing:5px;color:#8a7a6a;font-style:italic;">❤️ Birthday ❤️</div>
+                        <img src="assets/photos/front.jpg" alt="Front Cover" style="height:72%;width:92%;object-fit:contain;border-radius:2px;">
+                        <div style="margin-top:10px;font-size:1.4rem;font-weight:400;color:#b8860b;letter-spacing:2px;">✨ MY LOVE KOMAL ✨</div>
+                        <div style="font-size:0.6rem;letter-spacing:5px;color:#8a7a6a;font-style:italic;">❤️ Birthday ❤️</div>
                     </div>
                 `;
             } else if (type === 'photo') {
@@ -695,20 +726,20 @@
             } else if (type === 'back') {
                 inner.innerHTML = `
                     <div class="polaroid" style="justify-content:center;">
-                        <img src="assets/photos/back.jpg" alt="Back" style="height:70%;width:90%;object-fit:contain;border-radius:2px;">
-                        <div style="margin-top:10px;font-size:1.3rem;color:#6a5a4a;font-style:italic;letter-spacing:4px;">🌟 Forever 🌟</div>
+                        <img src="assets/photos/back.jpg" alt="Back Cover" style="height:72%;width:92%;object-fit:contain;border-radius:2px;">
+                        <div style="margin-top:10px;font-size:1.2rem;color:#6a5a4a;font-style:italic;letter-spacing:4px;">🌟 Forever 🌟</div>
                     </div>
                 `;
             }
 
             page.appendChild(inner);
-            book.appendChild(page);
+            return page;
         }
 
         // ============================================
-        // ADD BIRTHDAY PAGE
+        // CREATE BIRTHDAY PAGE
         // ============================================
-        function addBirthdayPage() {
+        function createBirthdayPage() {
             var page = document.createElement('div');
             page.className = 'page';
             var inner = document.createElement('div');
@@ -721,13 +752,7 @@
                 <div style="margin-top:0.8rem;font-size:0.9rem;color:#b8860b;letter-spacing:4px;">— Aniket</div>
             `;
             page.appendChild(inner);
-
-            var children = book.children;
-            if (children.length >= 7) {
-                book.insertBefore(page, children[7]);
-            } else {
-                book.appendChild(page);
-            }
+            return page;
         }
 
         // ============================================
@@ -737,23 +762,25 @@
             if (bookOpen) return;
             bookOpen = true;
             flipControls.classList.add('active');
+            // Show first page (front cover)
             setTimeout(function() {
                 flipToPage(0);
-            }, 600);
+            }, 400);
         }
 
         // ============================================
-        // FLIP TO PAGE
+        // FLIP TO PAGE - FIXED
         // ============================================
         function flipToPage(index) {
             if (isFlipping || closing) return;
             if (index < 0 || index >= totalPages) return;
 
             isFlipping = true;
-            var pages = book.querySelectorAll('.page');
 
-            for (var i = 0; i < pages.length; i++) {
-                var p = pages[i];
+            for (var i = 0; i < pageElements.length; i++) {
+                var p = pageElements[i];
+                // Pages before or equal to current index are open (0deg)
+                // Pages after current index are closed (-180deg)
                 if (i <= index) {
                     p.style.transform = 'rotateY(0deg)';
                 } else {
@@ -791,9 +818,8 @@
             if (closing) return;
             closing = true;
 
-            var pages = book.querySelectorAll('.page');
-            for (var i = pages.length - 1; i >= 0; i--) {
-                var p = pages[i];
+            for (var i = pageElements.length - 1; i >= 0; i--) {
+                var p = pageElements[i];
                 p.style.transform = 'rotateY(-180deg)';
                 p.style.zIndex = totalPages - i;
             }
@@ -876,7 +902,10 @@
 
         console.log('❤️ Happy Birthday Komal - Premium Luxury ❤️');
         console.log('✅ All systems ready!');
+        console.log('📖 Total pages: 9');
     })();
 </script>
 </body>
 </html>
+
+</div>
