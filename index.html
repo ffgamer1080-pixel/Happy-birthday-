@@ -1,0 +1,842 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Happy Birthday Komal ❤️</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
+        body{background:#0a0505;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Georgia',serif;overflow:hidden;position:relative}
+        
+        #app{position:relative;width:100vw;height:100vh;max-width:100%;max-height:100%;background:#0a0505;overflow:hidden;display:flex;align-items:center;justify-content:center}
+        
+        /* ===== BOOK CONTAINER ===== */
+        .notebook-wrapper{
+            position:absolute;
+            z-index:10;
+            width:96%;
+            max-width:130vh;
+            aspect-ratio:16/6.5;
+            perspective:1800px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            opacity:1;
+            transition:all 1.2s cubic-bezier(0.23,1,0.32,1);
+            transform:scale(1) rotateY(0deg);
+        }
+        .notebook-wrapper.hide{
+            opacity:0;
+            transform:scale(0.2) rotateY(90deg);
+            pointer-events:none;
+        }
+        
+        .notebook{
+            position:relative;
+            width:100%;
+            height:100%;
+            transform-style:preserve-3d;
+            transform:rotateY(-5deg) rotateX(1deg);
+            transition:transform 0.8s cubic-bezier(0.23,1,0.32,1);
+            filter:drop-shadow(0 25px 70px rgba(0,0,0,0.6));
+        }
+        .notebook-cover{
+            position:relative;
+            width:100%;
+            height:100%;
+            border-radius:8px 14px 14px 8px;
+            background:linear-gradient(145deg,#fcf6ed,#efe8d8);
+            box-shadow:inset 0 0 50px rgba(0,0,0,0.05),0 15px 40px rgba(0,0,0,0.25);
+            overflow:hidden;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:18px;
+            border-left:4px solid rgba(0,0,0,0.06);
+        }
+        .notebook-pages{
+            position:absolute;
+            inset:8px;
+            background:#fff;
+            border-radius:4px 8px 8px 4px;
+            box-shadow:inset 0 0 40px rgba(0,0,0,0.03);
+            display:flex;
+            flex-direction:row;
+            overflow:hidden;
+        }
+        .page-left{
+            width:50%;height:100%;padding:28px 20px 28px 28px;
+            background:linear-gradient(180deg,#fcfaf7,#f8f4ed);
+            border-right:2px solid rgba(0,0,0,0.06);
+            display:flex;flex-direction:column;justify-content:center;align-items:center;
+            overflow:hidden;position:relative;
+        }
+        .page-left::before{
+            content:'';position:absolute;inset:30px 20px 30px 28px;
+            background:repeating-linear-gradient(transparent,transparent 26px,rgba(200,190,180,0.12) 26px,rgba(200,190,180,0.12) 27px);
+            pointer-events:none;
+        }
+        .page-left .content{position:relative;z-index:2;text-align:center;width:100%}
+        .page-left .content h1{font-size:clamp(1.2rem,3vw,3rem);font-weight:700;color:#4a2a2a;margin-bottom:0.6rem;letter-spacing:3px}
+        .page-left .content .lyric-line{
+            font-size:clamp(0.65rem,1.4vw,1.15rem);color:#4a2a2a;line-height:2;
+            opacity:0;transform:translateY(12px);transition:all 0.5s ease;padding:3px 0;
+        }
+        .page-left .content .lyric-line.show{opacity:1;transform:translateY(0)}
+        .page-left .content .lyric-line.hindi{font-weight:700;color:#3a2a2a;font-size:clamp(0.7rem,1.5vw,1.25rem)}
+        .page-left .content .lyric-line.hinglish{color:#8a7a6a;font-style:italic;font-weight:300;font-size:clamp(0.6rem,1.2vw,0.95rem);border-bottom:1px solid rgba(212,175,55,0.08);padding-bottom:5px;margin-bottom:5px}
+        .page-right{width:50%;height:100%;padding:28px 28px 28px 20px;background:linear-gradient(180deg,#fcfaf7,#f8f4ed);display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:hidden;position:relative}
+        .page-right::before{
+            content:'';position:absolute;inset:30px 28px 30px 20px;
+            background:repeating-linear-gradient(transparent,transparent 26px,rgba(200,190,180,0.12) 26px,rgba(200,190,180,0.12) 27px);
+            pointer-events:none;
+        }
+        .page-right .photo-container{width:100%;height:100%;border-radius:4px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.06);background:#e8ddd0;display:flex;align-items:center;justify-content:center}
+        .page-right .photo-container img{width:100%;height:100%;object-fit:contain}
+        .page-right .content{position:relative;z-index:2;text-align:center;width:100%}
+        .page-right .content .wish-text{font-size:clamp(0.85rem,1.8vw,1.5rem);color:#4a2a2a;line-height:2;font-style:italic;max-width:95%;margin:0 auto}
+        .page-right .content .wish-title{font-size:clamp(1.2rem,2.8vw,2.5rem);font-weight:700;background:linear-gradient(180deg,#f9e5b3,#d4af37,#b8860b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:0.5rem}
+        .page-right .content .wish-love{font-size:clamp(0.9rem,2vw,1.8rem);color:#b8860b;margin-top:0.8rem}
+        
+        .center-spiral{position:absolute;top:0;left:50%;transform:translateX(-50%);width:34px;height:100%;display:flex;flex-direction:column;justify-content:space-evenly;padding:15px 0;z-index:20;pointer-events:none}
+        .center-spiral .ring{width:32px;height:15px;border:5px solid #94a3b8;border-radius:50%;background:linear-gradient(180deg,#64748b,#475569);box-shadow:inset 0 -4px 8px rgba(0,0,0,0.4),0 2px 6px rgba(0,0,0,0.1);transform:rotateX(-8deg);margin:0 auto}
+        .center-spiral .ring::after{content:'';display:block;width:55%;height:25%;background:rgba(255,255,255,0.12);border-radius:50%;margin:2px auto 0}
+        
+        .tabs-container{position:absolute;right:-8px;top:10%;height:80%;width:14px;display:flex;flex-direction:column;justify-content:space-evenly;pointer-events:none;z-index:5}
+        .tab{width:20px;height:30px;border-radius:0 6px 6px 0;box-shadow:3px 2px 8px rgba(0,0,0,0.1)}
+        .tab-green{background:linear-gradient(180deg,#a3e635,#84cc16)}
+        .tab-pink{background:linear-gradient(180deg,#f472b6,#db2777)}
+        .tab-orange{background:linear-gradient(180deg,#fb923c,#ea580c)}
+        .tab-purple{background:linear-gradient(180deg,#a78bfa,#7c3aed)}
+        .page-number{position:absolute;bottom:12px;right:20px;font-size:0.6rem;color:#b8a8a8;letter-spacing:2px;font-style:italic;z-index:5}
+        .page-number.left{bottom:12px;left:22px;right:auto}
+        #progress-bar{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:20;color:#b8a8a8;font-size:0.6rem;letter-spacing:5px;background:rgba(0,0,0,0.25);padding:3px 18px;border-radius:20px;backdrop-filter:blur(4px);border:1px solid rgba(212,175,55,0.06);font-weight:300}
+        #flip-controls{position:absolute;bottom:60px;left:0;right:0;z-index:30;display:none;justify-content:space-between;padding:0 20px;pointer-events:none}
+        #flip-controls.active{display:flex}
+        .flip-btn{pointer-events:auto;background:rgba(20,15,12,0.5);backdrop-filter:blur(8px);border:1px solid rgba(212,175,55,0.12);color:#d4af37;padding:8px 18px;border-radius:30px;font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;cursor:pointer;transition:all .3s ease;min-width:60px;font-weight:300;font-family:'Georgia',serif}
+        .flip-btn:active{transform:scale(.92);background:rgba(212,175,55,0.12)}
+        .flip-btn:disabled{opacity:0.2;cursor:not-allowed;transform:none}
+        .flip-btn.prev{border-radius:30px 5px 5px 30px;border-left:2px solid rgba(212,175,55,0.15)}
+        .flip-btn.next{border-radius:5px 30px 30px 5px;border-right:2px solid rgba(212,175,55,0.15)}
+        
+        /* ===== SPLASH ===== */
+        #splash{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#2d1a1a,#1a0a0a 70%);z-index:100;transition:opacity 1s ease;padding:2rem 1.2rem;text-align:center}
+        #splash.hidden{opacity:0;pointer-events:none}
+        .sub-text{font-size:clamp(0.7rem,1.2vw,1rem);color:#e8c8c8;letter-spacing:6px;font-weight:300;text-transform:uppercase;margin-bottom:2px}
+        .stars{color:#d4af37;font-size:clamp(1rem,1.8vw,1.6rem);letter-spacing:10px;opacity:0.7;margin:2px 0}
+        .big-name{font-size:clamp(2rem,4.5vw,4rem);font-family:'Georgia',serif;font-weight:900;font-style:italic;background:linear-gradient(180deg,#f9e5b3 0%,#d4af37 40%,#b8860b 80%,#f9e5b3 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;line-height:1.2;white-space:normal;word-wrap:break-word;max-width:100%;padding:0 5px}
+        .glow-line{width:80px;height:2px;background:linear-gradient(90deg,transparent,#d4af37,transparent);margin:4px auto;opacity:0.4;border-radius:2px}
+        .sub-text2{font-size:clamp(0.5rem,0.9vw,0.8rem);color:#c8a8a8;letter-spacing:8px;font-weight:300;border-top:1px solid rgba(212,175,55,0.15);padding-top:0.6rem;width:60%;margin:0.3rem auto;text-transform:uppercase}
+        .typewriter{font-size:clamp(0.6rem,1vw,1rem);color:#e8d0d0;margin:0.8rem 0 1rem;min-height:2.5rem;font-family:'Courier New',monospace;letter-spacing:3px;border-right:2px solid #d4af37;padding-right:8px;white-space:nowrap;overflow:hidden;display:inline-block;animation:blinkCursor .9s step-end infinite}
+        @keyframes blinkCursor{0%,100%{border-color:#d4af37}50%{border-color:transparent}}
+        .countdown-big{font-size:clamp(3rem,5vw,5rem);font-weight:300;font-family:'Georgia',serif;color:#f9e5b3;text-shadow:0 0 60px rgba(212,175,55,0.3);animation:pulseGlow .8s ease-in-out infinite alternate;letter-spacing:8px}
+        @keyframes pulseGlow{0%{opacity:.5;transform:scale(.95)}100%{opacity:1;transform:scale(1.05)}}
+        #heart-btn{background:transparent;border:none;display:none;flex-direction:column;align-items:center;gap:10px;cursor:pointer;margin-top:5px}
+        #heart-btn.show{display:flex}
+        .heart-icon{font-size:clamp(3rem,5vw,4.8rem);filter:drop-shadow(0 0 40px rgba(255,51,102,0.4));animation:heartPulse 1.4s ease-in-out infinite}
+        @keyframes heartPulse{0%{transform:scale(1)}15%{transform:scale(1.15)}30%{transform:scale(1)}45%{transform:scale(1.1)}60%{transform:scale(1)}100%{transform:scale(1)}}
+        .heart-label{color:#d4af37;font-size:clamp(0.5rem,0.9vw,0.8rem);letter-spacing:8px;text-transform:uppercase;background:rgba(20,15,12,0.8);padding:5px 24px;border-radius:40px;backdrop-filter:blur(10px);border:1px solid rgba(212,175,55,0.2);font-weight:300}
+        
+        /* ============================================
+           FINAL SCREEN - CANDLE + BALLOONS + RAINDROPS
+           ============================================ */
+        #final-screen{
+            position:absolute;
+            inset:0;
+            z-index:200;
+            background:radial-gradient(ellipse at center,#1a0a0a,#0a0505 70%);
+            display:none;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+            padding:2rem;
+        }
+        #final-screen.active{display:flex}
+        
+        /* ===== HAPPY BIRTHDAY RAINDROPS ===== */
+        .rain-container{
+            position:absolute;
+            inset:0;
+            pointer-events:none;
+            overflow:hidden;
+        }
+        .raindrop{
+            position:absolute;
+            color:rgba(212,175,55,0.08);
+            font-size:clamp(0.8rem,2vw,2rem);
+            font-family:'Georgia',serif;
+            font-weight:700;
+            letter-spacing:2px;
+            animation:rainDrop linear infinite;
+            white-space:nowrap;
+            text-shadow:0 0 20px rgba(212,175,55,0.05);
+        }
+        @keyframes rainDrop{
+            0%{transform:translateY(-10vh) rotate(0deg);opacity:0}
+            10%{opacity:0.3}
+            90%{opacity:0.3}
+            100%{transform:translateY(110vh) rotate(360deg);opacity:0}
+        }
+        
+        /* ===== BALLOONS - HEART SHAPE ===== */
+        .balloon-container{
+            position:absolute;
+            inset:0;
+            pointer-events:none;
+            overflow:hidden;
+            z-index:1;
+        }
+        .balloon{
+            position:absolute;
+            font-size:clamp(1.2rem,3vw,2.8rem);
+            animation:floatUp linear infinite;
+            opacity:0.7;
+            filter:drop-shadow(0 4px 12px rgba(255,51,102,0.2));
+        }
+        @keyframes floatUp{
+            0%{transform:translateY(110vh) scale(0.3) rotate(0deg);opacity:0}
+            10%{opacity:0.8}
+            90%{opacity:0.8}
+            100%{transform:translateY(-10vh) scale(1.2) rotate(720deg);opacity:0}
+        }
+        .balloon::after{
+            content:'▼';
+            position:absolute;
+            bottom:-10px;
+            left:50%;
+            transform:translateX(-50%);
+            font-size:0.3rem;
+            color:rgba(255,255,255,0.1);
+        }
+        
+        /* ===== RAIN LINES BACKGROUND ===== */
+        .rain-overlay{
+            position:absolute;
+            inset:0;
+            pointer-events:none;
+            z-index:0;
+            overflow:hidden;
+        }
+        .rain-line{
+            position:absolute;
+            top:-10px;
+            width:1px;
+            background:linear-gradient(180deg,transparent,rgba(212,175,55,0.05));
+            animation:rainLine linear infinite;
+        }
+        @keyframes rainLine{
+            0%{transform:translateY(-10px)}
+            100%{transform:translateY(100vh)}
+        }
+        
+        /* ===== CANDLE ===== */
+        .candle-container{
+            position:relative;
+            z-index:10;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            margin-top:1rem;
+        }
+        .candle-wrapper{
+            position:relative;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            animation:candleFloat 3s ease-in-out infinite;
+        }
+        @keyframes candleFloat{
+            0%,100%{transform:translateY(0)}
+            50%{transform:translateY(-8px)}
+        }
+        
+        /* Candle Body */
+        .candle-body{
+            width:clamp(40px,8vw,80px);
+            height:clamp(80px,16vw,160px);
+            background:linear-gradient(180deg,#f5e6d3,#e8d5c0,#d4b89b);
+            border-radius:clamp(4px,0.8vw,8px) clamp(4px,0.8vw,8px) clamp(2px,0.4vw,4px) clamp(2px,0.4vw,4px);
+            position:relative;
+            box-shadow:inset -4px 0 20px rgba(0,0,0,0.1),inset 4px 0 20px rgba(255,255,255,0.2);
+            border:1px solid rgba(200,180,160,0.3);
+        }
+        .candle-body::before{
+            content:'';position:absolute;inset:0;
+            background:repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent clamp(6px,1vw,12px),
+                rgba(200,180,160,0.2) clamp(6px,1vw,12px),
+                rgba(200,180,160,0.2) clamp(8px,1.2vw,14px)
+            );
+            border-radius:inherit;
+        }
+        .candle-body::after{
+            content:'';position:absolute;top:0;left:20%;width:8px;height:20px;
+            background:linear-gradient(180deg,#f5e6d3,transparent);
+            border-radius:0 0 50% 50%;
+            opacity:0.5;
+        }
+        .wax-drip{
+            position:absolute;top:0;width:clamp(4px,0.8vw,8px);height:clamp(10px,2vw,25px);
+            background:linear-gradient(180deg,#f5e6d3,transparent);
+            border-radius:0 0 50% 50%;
+            opacity:0.4;
+        }
+        .wax-drip:nth-child(1){left:10%;height:15px}
+        .wax-drip:nth-child(2){left:50%;height:25px;width:6px}
+        .wax-drip:nth-child(3){right:15%;height:12px}
+        
+        /* ===== FLAME ===== */
+        .flame-wrapper{
+            position:absolute;
+            top:clamp(-25px,-4vw,-20px);
+            left:50%;
+            transform:translateX(-50%);
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            animation:flameMove 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes flameMove{
+            0%{transform:translateX(-50%) skewX(-5deg)}
+            100%{transform:translateX(-50%) skewX(5deg)}
+        }
+        .flame-outer{
+            width:clamp(20px,4vw,40px);
+            height:clamp(30px,6vw,60px);
+            background:radial-gradient(ellipse at 50% 100%,#ff6b35, #ff4500 40%, transparent 70%);
+            border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation:flameFlicker 0.3s ease-in-out infinite alternate;
+            position:relative;
+            filter:blur(1px);
+        }
+        .flame-inner{
+            position:absolute;
+            bottom:10%;
+            left:50%;
+            transform:translateX(-50%);
+            width:clamp(10px,2vw,20px);
+            height:clamp(18px,3.5vw,35px);
+            background:radial-gradient(ellipse at 50% 100%, #ffdd44, #ff9900 30%, transparent 60%);
+            border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation:flameFlicker 0.25s ease-in-out infinite alternate;
+        }
+        .flame-glow{
+            position:absolute;
+            top:-20px;
+            left:50%;
+            transform:translateX(-50%);
+            width:clamp(60px,12vw,120px);
+            height:clamp(60px,12vw,120px);
+            background:radial-gradient(circle, rgba(255,150,50,0.3), transparent 70%);
+            border-radius:50%;
+            animation:glowPulse 1.2s ease-in-out infinite alternate;
+        }
+        @keyframes flameFlicker{
+            0%{transform:translateX(-2px) scaleY(0.95) rotate(-2deg)}
+            100%{transform:translateX(2px) scaleY(1.05) rotate(2deg)}
+        }
+        @keyframes glowPulse{
+            0%{opacity:0.5;transform:translateX(-50%) scale(0.9)}
+            100%{opacity:1;transform:translateX(-50%) scale(1.1)}
+        }
+        
+        /* ===== CANDLE BLOWN OUT STATE ===== */
+        .candle-wrapper.extinct .flame-wrapper{display:none}
+        .candle-wrapper.extinct .smoke{
+            display:block;
+            animation:smokeRise 2s ease-out forwards;
+        }
+        .smoke{
+            display:none;
+            position:absolute;
+            top:clamp(-20px,-3vw,-15px);
+            left:50%;
+            transform:translateX(-50%);
+            font-size:clamp(1.5rem,3vw,3rem);
+            opacity:0.6;
+            color:rgba(200,200,200,0.3);
+        }
+        @keyframes smokeRise{
+            0%{transform:translateX(-50%) scale(0.5);opacity:0.6}
+            100%{transform:translateX(-50%) scale(2) translateY(-60px);opacity:0}
+        }
+        
+        /* ===== CANDLE PLATFORM ===== */
+        .candle-platform{
+            width:clamp(70px,14vw,140px);
+            height:clamp(8px,1.2vw,14px);
+            background:linear-gradient(180deg,#d4b89b,#c4a88a);
+            border-radius:clamp(2px,0.4vw,4px);
+            box-shadow:0 4px 20px rgba(0,0,0,0.2);
+            margin-top:2px;
+        }
+        .candle-text{
+            font-size:clamp(0.8rem,1.5vw,1.4rem);
+            color:#d4af37;
+            letter-spacing:4px;
+            font-family:'Georgia',serif;
+            text-shadow:0 0 30px rgba(212,175,55,0.2);
+            margin-top:clamp(10px,2vw,20px);
+            opacity:0.8;
+        }
+        .candle-text span{display:inline-block;animation:textShine 2s ease-in-out infinite}
+        @keyframes textShine{
+            0%,100%{opacity:0.5}
+            50%{opacity:1}
+        }
+        
+        @media(max-width:768px){
+            .notebook-wrapper{width:97%;aspect-ratio:16/11}
+            .center-spiral{width:26px}
+            .center-spiral .ring{width:24px;height:12px;border-width:4px}
+            .tabs-container{right:-5px;width:10px}
+            .tab{width:16px;height:24px}
+            .page-left{padding:18px 12px 18px 18px}
+            .page-right{padding:18px 18px 18px 12px}
+            .page-left .content h1{font-size:clamp(1rem,2.2vw,1.8rem)}
+        }
+        @media(max-width:480px){
+            .notebook-wrapper{width:99%;aspect-ratio:16/13}
+            .page-left .content .lyric-line.hindi{font-size:clamp(0.55rem,1.1vw,0.75rem)}
+            .page-left .content .lyric-line.hinglish{font-size:clamp(0.45rem,0.9vw,0.6rem)}
+            .flip-btn{padding:5px 12px;font-size:0.5rem;min-width:45px}
+            #flip-controls{bottom:45px;padding:0 12px}
+            .center-spiral{width:20px}
+            .center-spiral .ring{width:18px;height:9px;border-width:3px}
+            .candle-body{height:clamp(60px,12vw,100px)}
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+
+    <!-- ===== SPLASH ===== -->
+    <div id="splash">
+        <div class="sub-text">Happy Birthday Dear</div>
+        <div class="stars">★ ★ ★ ★ ★</div>
+        <div class="big-name">MY LOVE KOMAL</div>
+        <div class="glow-line"></div>
+        <div class="sub-text2">❤️ Birthday Luxury ❤️</div>
+        <div class="typewriter" id="typewriter">A Special Memory Awaits...</div>
+        <div id="countdown-area" class="countdown-big">3</div>
+        <button id="heart-btn">
+            <span class="heart-icon">❤️</span>
+            <span class="heart-label">Tap To Begin</span>
+        </button>
+    </div>
+
+    <!-- ===== BOOK ===== -->
+    <div class="notebook-wrapper" id="notebookWrapper">
+        <div class="notebook" id="notebook">
+            <div class="notebook-cover">
+                <div class="center-spiral">
+                    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                </div>
+                <div class="notebook-pages" id="bookPages">
+                    <div class="page-left" id="pageLeft">
+                        <div class="content" id="leftContent">
+                            <h1>✨ MY LOVE KOMAL ✨</h1>
+                            <div id="lyricsContainer">
+                                <div class="lyric-line hindi show">तन्ने मैं लिखूँ रानी दिल की</div>
+                                <div class="lyric-line hinglish show">Tanne main likhu Rani dil ki</div>
+                                <div class="lyric-line hindi">या तन्ने मुमताज़ लिखूँगा</div>
+                                <div class="lyric-line hinglish">Ya tanne Mumtaz likhunga</div>
+                            </div>
+                        </div>
+                        <div class="page-number left">1</div>
+                    </div>
+                    <div class="page-right" id="pageRight">
+                        <div class="photo-container" id="rightPhoto">
+                            <img src="assets/photos/front.jpg" alt="Photo" id="photoDisplay">
+                        </div>
+                        <div class="content" id="rightContent" style="display:none;">
+                            <div class="wish-title" id="rightWishTitle">🎂 Happy Birthday</div>
+                            <div class="wish-text" id="rightWishText">Wishing you all the love and happiness.</div>
+                            <div class="wish-love" id="rightWishLove">❤️ Made With Love ❤️</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tabs-container">
+                    <div class="tab tab-green"></div>
+                    <div class="tab tab-pink"></div>
+                    <div class="tab tab-orange"></div>
+                    <div class="tab tab-purple"></div>
+                </div>
+            </div>
+            <div id="progress-bar">1 / 9</div>
+            <div id="flip-controls">
+                <button class="flip-btn prev" id="prevBtn">‹ Prev</button>
+                <button class="flip-btn next" id="nextBtn">Next ›</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+    FINAL SCREEN - CANDLE + BALLOONS + RAIN
+    ============================================ -->
+    <div id="final-screen">
+        <!-- Raindrops Container -->
+        <div class="rain-container" id="rainContainer"></div>
+        
+        <!-- Balloon Container -->
+        <div class="balloon-container" id="balloonContainer"></div>
+        
+        <!-- Rain Lines -->
+        <div class="rain-overlay" id="rainOverlay"></div>
+        
+        <!-- Candle -->
+        <div class="candle-container">
+            <div class="candle-wrapper" id="candleWrapper">
+                <!-- Flame -->
+                <div class="flame-wrapper" id="flameWrapper">
+                    <div class="flame-glow"></div>
+                    <div class="flame-outer">
+                        <div class="flame-inner"></div>
+                    </div>
+                </div>
+                <!-- Smoke -->
+                <div class="smoke" id="smokeEl">💨</div>
+                <!-- Candle Body -->
+                <div class="candle-body" id="candleBody">
+                    <div class="wax-drip"></div>
+                    <div class="wax-drip"></div>
+                    <div class="wax-drip"></div>
+                </div>
+                <!-- Platform -->
+                <div class="candle-platform"></div>
+            </div>
+            <div class="candle-text" id="candleText">
+                <span>✨</span> Make a Wish <span>✨</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){'use strict';
+
+// ===== LYRICS DATA =====
+var LYRICS_SET = [
+    {hindi:['तन्ने मैं लिखूँ रानी दिल की','या तन्ने मुमताज़ लिखूँगा','जे लिखने में बैठ गया तन्ने','तो पक्का मैं किताब लिखूँगा'],hinglish:['Tanne main likhu Rani dil ki','Ya tanne Mumtaz likhunga','Je likhne mein baith gaya tanne','To pakka main kitaab likhunga']},
+    {hindi:['रे होठां ने गुलाब लिख दूँ','रे अखियां ने शराब लिखूँगा','चुन्नी में जो मोती जड़रे','उसनै छोरी तारा लिखूँ'],hinglish:['Re hothan ne gulaab likh dun','Re akhiyan ne sharaab likhunga','Chunni mein jo moti jadre','Usne chhori taara likhu']},
+    {hindi:['चाँद फीका लागे से','यो रूप कितना प्यारा लिखूँ','राम का इशारा लिखूँ','देख्या ना नज़ारा लिखूँ'],hinglish:['Chaand feeka laage se','Yo roop kitna pyaara likhu','Ram ka ishaara likhu','Dekhya na nazaara likhu']},
+    {hindi:['बात छोटी लागे मेरी','काट के दुबारा लिखूँ','रे बातां ने अलाप लिखूँगा','जो दिख जा तू ख्वाब लिखूँगा'],hinglish:['Baat chhoti laage meri','Kaat ke dubaara likhu','Re baatan ne alaap likhunga','Jo dikh ja tu khwaab likhunga']},
+    {hindi:['हो पूछे ना तू मेरे तै','या आशिक का हाल','रेशम तै ज़्यादा है','सुनहरे तेरे बाल'],hinglish:['Ho poochhe na tu mere tai','Ya aashiq ka haal','Resham tai zyada hai','Sunahre tere baal']},
+    {hindi:['परियों के देश तै तू आई','वीज़ा डाल के','रेड मून जैसी ए तू','लागे से कमाल'],hinglish:['Pariyon ke desh tai tu aayi','Visa daal ke','Red moon jaisi e tu','Laage se kamaal']}
+];
+
+var WISHES = [
+    {title:'🎂 Happy Birthday',text:'Wishing you all the love and happiness in the world. You deserve every bit of joy that comes your way.',love:'❤️ Made With Love ❤️'},
+    {title:'✨ You Are Special',text:'Your smile lights up the room and your heart is pure gold. Never forget how amazing you are.',love:'🌟 Always Shine Bright 🌟'}
+];
+
+// ===== DOM =====
+var splash=document.getElementById('splash');
+var typewriterEl=document.getElementById('typewriter');
+var countdownArea=document.getElementById('countdown-area');
+var heartBtn=document.getElementById('heart-btn');
+var finalScreen=document.getElementById('final-screen');
+var progress=document.getElementById('progress-bar');
+var flipControls=document.getElementById('flip-controls');
+var prevBtn=document.getElementById('prevBtn');
+var nextBtn=document.getElementById('nextBtn');
+var leftContent=document.getElementById('leftContent');
+var lyricsContainer=document.getElementById('lyricsContainer');
+var rightPhoto=document.getElementById('rightPhoto');
+var rightContent=document.getElementById('rightContent');
+var photoDisplay=document.getElementById('photoDisplay');
+var rightWishTitle=document.getElementById('rightWishTitle');
+var rightWishText=document.getElementById('rightWishText');
+var rightWishLove=document.getElementById('rightWishLove');
+var notebook=document.getElementById('notebook');
+var notebookWrapper=document.getElementById('notebookWrapper');
+var candleWrapper=document.getElementById('candleWrapper');
+var flameWrapper=document.getElementById('flameWrapper');
+var smokeEl=document.getElementById('smokeEl');
+var candleText=document.getElementById('candleText');
+
+// ===== STATE =====
+var currentPage=0;
+var totalPages=9;
+var isPlaying=false;
+var musicStarted=false;
+var musicEl=null;
+var isFlipping=false;
+var autoFlipTimer=null;
+var isAutoFlip=true;
+var isManualClick=false;
+var lyricTimer=null;
+var candleTimer=null;
+
+// ===== TYPEWRITER =====
+function typeWriter(text,el,speed){speed=speed||70;var i=0;el.textContent='';function type(){if(i<text.length){el.textContent+=text.charAt(i);i++;setTimeout(type,speed)}}type()}
+
+// ===== COUNTDOWN =====
+var countdown=3;
+function runCountdown(){if(countdownArea){countdownArea.textContent=countdown}if(countdown===0){countdownArea.style.display='none';heartBtn.classList.add('show');return}countdown--;setTimeout(runCountdown,800)}
+
+typeWriter('A Special Memory Awaits...',typewriterEl,70);
+setTimeout(function(){runCountdown()},1200);
+
+// ===== HEART BUTTON =====
+heartBtn.addEventListener('click',function(e){
+    e.preventDefault();
+    if(isPlaying)return;
+    isPlaying=true;
+    splash.classList.add('hidden');
+    flipControls.classList.add('active');
+    initMusic();
+    showPage(0);
+    startAutoFlip();
+});
+
+// ===== MUSIC =====
+function initMusic(){
+    if(musicStarted)return;
+    musicStarted=true;
+    try{
+        musicEl=new Audio('assets/music/romantic_track.mp3');
+        musicEl.loop=false;
+        musicEl.volume=0;
+        musicEl.play().then(function(){fadeInMusic()}).catch(function(){});
+    }catch(_){}
+}
+function fadeInMusic(){
+    if(!musicEl)return;
+    var vol=0;var interval=setInterval(function(){if(vol<0.4){vol=vol+0.03;musicEl.volume=Math.min(vol,0.4)}else{clearInterval(interval)}},120);
+}
+function fadeOutMusic(callback){
+    if(!musicEl){if(callback)callback();return}
+    var vol=musicEl.volume;var interval=setInterval(function(){if(vol>0.05){vol=vol-0.05;musicEl.volume=Math.max(vol,0)}else{clearInterval(interval);musicEl.pause();if(callback)callback()}},80);
+}
+
+// ===== AUTO FLIP =====
+function startAutoFlip(){
+    if(autoFlipTimer)clearTimeout(autoFlipTimer);
+    function autoFlip(){
+        if(currentPage<totalPages-1){
+            showPage(currentPage+1);
+            autoFlipTimer=setTimeout(autoFlip,10000);
+        }else{
+            closeBook();
+        }
+    }
+    autoFlipTimer=setTimeout(autoFlip,8000);
+}
+function stopAutoFlip(){if(autoFlipTimer){clearTimeout(autoFlipTimer);autoFlipTimer=null}isAutoFlip=false}
+
+// ===== ANIMATE LYRICS =====
+function animateLyrics(lines, index){
+    if(index >= lines.length){
+        if(autoFlipTimer) clearTimeout(autoFlipTimer);
+        autoFlipTimer = setTimeout(function(){
+            if(currentPage < totalPages-1 && !isManualClick){showPage(currentPage+1)}
+        }, 3000);
+        return;
+    }
+    var line = lines[index];
+    setTimeout(function(){
+        line.classList.add('show');
+        setTimeout(function(){animateLyrics(lines, index + 1);}, 1500);
+    }, 200);
+}
+
+// ===== SHOW PAGE =====
+function showPage(index){
+    if(isFlipping)return;
+    if(index<0||index>=totalPages)return;
+    if(isManualClick&&isAutoFlip){stopAutoFlip();isManualClick=false}
+    isFlipping=true;
+    rightPhoto.style.display='block';
+    rightContent.style.display='none';
+    lyricsContainer.innerHTML='';
+    if(index===0){
+        leftContent.innerHTML='<h1>✨ MY LOVE KOMAL ✨</h1><div id="lyricsContainer"><div class="lyric-line hindi show" style="font-size:clamp(1rem,2.5vw,2rem);">❤️ Birthday ❤️</div></div>';
+        photoDisplay.src='assets/photos/front.jpg';
+        progress.textContent='1 / '+totalPages;
+        setTimeout(function(){isFlipping=false},300);
+    }
+    else if(index>=1 && index<=6){
+        var idx=index-1;var set=LYRICS_SET[idx%LYRICS_SET.length];
+        leftContent.innerHTML='<h1>✨ MY LOVE KOMAL ✨</h1><div id="lyricsContainer"></div>';
+        var container=document.getElementById('lyricsContainer');var lines=[];
+        for(var i=0;i<4;i++){
+            var hindiDiv=document.createElement('div');hindiDiv.className='lyric-line hindi';hindiDiv.textContent=set.hindi[i];container.appendChild(hindiDiv);lines.push(hindiDiv);
+            var hinglishDiv=document.createElement('div');hinglishDiv.className='lyric-line hinglish';hinglishDiv.textContent=set.hinglish[i];container.appendChild(hinglishDiv);lines.push(hinglishDiv);
+        }
+        photoDisplay.src='assets/photos/pic'+(idx+1)+'.jpg';
+        progress.textContent=(index+1)+' / '+totalPages;
+        setTimeout(function(){animateLyrics(lines,0);},500);
+        setTimeout(function(){isFlipping=false},300);
+    }
+    else if(index===7){
+        leftContent.innerHTML='<div class="wish-title">'+WISHES[0].title+'</div><div class="wish-text">'+WISHES[0].text+'</div><div class="wish-love">'+WISHES[0].love+'</div>';
+        rightPhoto.style.display='none';rightContent.style.display='block';
+        rightWishTitle.textContent=WISHES[1].title;rightWishText.textContent=WISHES[1].text;rightWishLove.textContent=WISHES[1].love;
+        progress.textContent=(index+1)+' / '+totalPages;
+        setTimeout(function(){isFlipping=false},300);
+    }
+    else if(index===8){
+        leftContent.innerHTML='<div class="wish-title">'+WISHES[1].title+'</div><div class="wish-text">'+WISHES[1].text+'</div><div class="wish-love">'+WISHES[1].love+'</div>';
+        rightPhoto.style.display='none';rightContent.style.display='block';
+        rightWishTitle.textContent='🎂 Forever & Always';rightWishText.textContent='You are the most beautiful soul. Keep shining.';rightWishLove.textContent='💖 With All My Love 💖';
+        progress.textContent=(index+1)+' / '+totalPages;
+        setTimeout(function(){isFlipping=false},300);
+    }
+    currentPage=index;updateButtons();
+    notebook.style.transform='rotateY('+(-5+(index*0.4))+'deg) rotateX(1deg)';
+}
+function updateButtons(){prevBtn.disabled=currentPage===0;nextBtn.disabled=currentPage===totalPages-1}
+
+// ============================================
+// CLOSE BOOK - GO TO FINAL SCREEN
+// ============================================
+function closeBook(){
+    stopAutoFlip();
+    flipControls.classList.remove('active');
+    
+    // Hide book with animation
+    notebookWrapper.classList.add('hide');
+    
+    fadeOutMusic(function(){
+        // Show final screen
+        finalScreen.classList.add('active');
+        initFinalEffects();
+    });
+}
+
+// ============================================
+// FINAL SCREEN EFFECTS
+// ============================================
+function initFinalEffects(){
+    createRaindrops();
+    createBalloons();
+    createRainLines();
+    startCandleTimer();
+    
+    // Text zoom effect after candle blows
+    setTimeout(function(){
+        var textEl = document.querySelector('#final-screen .candle-text');
+        if(textEl){
+            textEl.style.transition = 'all 3s ease';
+            textEl.style.transform = 'scale(2)';
+            textEl.style.opacity = '0';
+        }
+    }, 8000);
+}
+
+// ===== RAINDROPS =====
+function createRaindrops(){
+    var container=document.getElementById('rainContainer');
+    var texts=['Happy','Birthday','Komal','❤️','✨','🎂','🌟','💫'];
+    for(var i=0;i<30;i++){
+        var drop=document.createElement('div');
+        drop.className='raindrop';
+        drop.textContent=texts[Math.floor(Math.random()*texts.length)];
+        drop.style.left=Math.random()*100+'%';
+        drop.style.fontSize=(0.6+Math.random()*1.2)+'rem';
+        drop.style.animationDuration=(8+Math.random()*12)+'s';
+        drop.style.animationDelay=(Math.random()*15)+'s';
+        drop.style.opacity=0.05+Math.random()*0.1;
+        container.appendChild(drop);
+    }
+}
+
+// ===== BALLOONS =====
+function createBalloons(){
+    var container=document.getElementById('balloonContainer');
+    var emojis=['🎈','🎈','🎈','❤️','💖','💕','✨','🎀'];
+    for(var i=0;i<30;i++){
+        var balloon=document.createElement('div');
+        balloon.className='balloon';
+        balloon.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+        balloon.style.left=(2+Math.random()*96)+'%';
+        balloon.style.fontSize=(1+Math.random()*2)+'rem';
+        balloon.style.animationDuration=(10+Math.random()*15)+'s';
+        balloon.style.animationDelay=(Math.random()*20)+'s';
+        balloon.style.opacity=0.3+Math.random()*0.5;
+        container.appendChild(balloon);
+    }
+}
+
+// ===== RAIN LINES =====
+function createRainLines(){
+    var container=document.getElementById('rainOverlay');
+    for(var i=0;i<25;i++){
+        var line=document.createElement('div');
+        line.className='rain-line';
+        line.style.left=(Math.random()*100)+'%';
+        line.style.height=(30+Math.random()*80)+'px';
+        line.style.animationDuration=(2+Math.random()*4)+'s';
+        line.style.animationDelay=(Math.random()*5)+'s';
+        line.style.opacity=0.1+Math.random()*0.2;
+        container.appendChild(line);
+    }
+}
+
+// ===== CANDLE TIMER =====
+function startCandleTimer(){
+    // Candle blows out after 5 seconds
+    candleTimer=setTimeout(function(){
+        blowCandle();
+    }, 5000);
+}
+
+function blowCandle(){
+    // Hide flame
+    flameWrapper.style.display='none';
+    // Show smoke
+    smokeEl.style.display='block';
+    // Add extinct class
+    candleWrapper.classList.add('extinct');
+    // Change text
+    candleText.innerHTML='<span>🎂</span> Happy Birthday My Love! <span>🎂</span>';
+    candleText.style.fontSize='clamp(1.2rem,2.5vw,2.2rem)';
+    candleText.style.background='linear-gradient(180deg,#f9e5b3,#d4af37)';
+    candleText.style.webkitBackgroundClip='text';
+    candleText.style.webkitTextFillColor='transparent';
+}
+
+// ===== BUTTONS =====
+prevBtn.addEventListener('click',function(){if(currentPage>0){isManualClick=true;stopAutoFlip();showPage(currentPage-1);startAutoFlip()}});
+nextBtn.addEventListener('click',function(){if(currentPage<totalPages-1){isManualClick=true;stopAutoFlip();showPage(currentPage+1);startAutoFlip()}else{closeBook()}});
+
+// ===== KEYBOARD =====
+document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '){
+        e.preventDefault();
+        if(currentPage<totalPages-1){isManualClick=true;stopAutoFlip();showPage(currentPage+1);startAutoFlip()}else{closeBook()}
+    }else if(e.key==='ArrowLeft'){
+        e.preventDefault();
+        if(currentPage>0){isManualClick=true;stopAutoFlip();showPage(currentPage-1);startAutoFlip()}
+    }
+});
+
+// ===== VISIBILITY =====
+document.addEventListener('visibilitychange',function(){
+    if(document.hidden){if(musicEl)musicEl.pause();if(autoFlipTimer)clearTimeout(autoFlipTimer);if(candleTimer)clearTimeout(candleTimer)}
+    else{if(musicEl&&musicStarted){musicEl.play().catch(function(){})}if(isAutoFlip&&!finalScreen.classList.contains('active')){startAutoFlip()}}
+});
+
+// ===== PRELOAD =====
+function preloadImages(){var names=['front','back','pic1','pic2','pic3','pic4','pic5','pic6'];for(var i=0;i<names.length;i++){var img=new Image();img.src='assets/photos/'+names[i]+'.jpg'}}preloadImages();
+
+// ===== CLEANUP =====
+window.addEventListener('beforeunload',function(){if(musicEl)musicEl.pause();if(autoFlipTimer)clearTimeout(autoFlipTimer);if(candleTimer)clearTimeout(candleTimer);if(lyricTimer)clearTimeout(lyricTimer)});
+
+console.log('❤️ Happy Birthday Komal - Final Candle Edition ❤️');
+console.log('✅ All features ready!');
+
+})();
+</script>
+</body>
+</html>
